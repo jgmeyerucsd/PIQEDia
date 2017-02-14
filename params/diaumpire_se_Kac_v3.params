@@ -1,0 +1,128 @@
+
+####################################################################################################
+#No of threads
+Thread = 10
+####################################################################################################
+
+## omit Thread
+#Fragment grouping parameter
+RPmax = 25
+RFmax = 300
+CorrThreshold=0.2
+DeltaApex = 0.6
+RTOverlap = 0.3
+AdjustFragIntensity =true
+BoostComplementaryIon=false
+
+SE.RemoveGroupedPeaks = true
+SE.RemoveGroupedPeaksRTOverlap = 0.3
+SE.RemoveGroupedPeaksCorr = 0.3
+
+
+#Report peak
+ExportPrecursorPeak = true
+ExportFragmentPeak = false
+
+#Signal extraction parameters
+SE.MS1PPM = 30
+SE.MS2PPM = 40
+SE.SN = 1.5
+SE.MS2SN = 1.5
+SE.MinMSIntensity = 1
+SE.MinMSMSIntensity = 1
+SE.MaxCurveRTRange = 1.5
+SE.Resolution = 17000
+SE.StartCharge = 1
+SE.EndCharge = 5
+SE.MS2StartCharge = 2
+SE.MS2EndCharge = 4
+SE.NoMissedScan = 1
+#SE.MinFrag=10
+SE.StartRT = 0
+SE.EndRT = 9999
+SE.MinMZ = 200
+SE.MinPrecursorMass = 700
+SE.MaxPrecursorMass = 5000
+SE.EstimateBG = true
+SE.IsoPattern = 0.5
+SE.MassDefectFilter = true
+SE.MassDefectOffset = 0.2
+
+SE.MinNoPeakCluster = 2
+SE.MaxNoPeakCluster = 4 
+
+
+#Isolation window setting
+#The current version supports the following window type: SWATH (fixed window size), V_SWATH (variable SWATH window), MSX, MSE, pSMART
+WindowType=V_SWATH
+
+#Fix window size (For SWATH)
+WindowSize=25
+
+#Variable SWATH window setting (start m/z, end m/z, separated by Tab)
+==window setting begin
+399.5	407.7
+407.2	415.2
+414.7	422.7
+422.2	430.2
+429.7	436.2
+435.7	443.7
+443.2	450.2
+449.7	456.2
+455.7	463.5
+463	467.7
+467.2	474.2
+473.7	479.9
+479.4	486.2
+485.7	490.6
+490.1	495.6
+495.1	501.2
+500.7	505.7
+505.2	510.2
+509.7	514.6
+514.1	518.7
+518.2	523.8
+523.3	528.3
+527.8	531.7
+531.2	536.3
+535.8	540.9
+540.4	545.8
+545.3	549.8
+549.3	554.6
+554.1	559.6
+559.1	564.3
+563.8	568.9
+568.4	572.7
+572.2	577.9
+577.4	582.1
+581.6	586.8
+586.3	592.9
+592.4	597.8
+597.3	603.7
+603.2	610.1
+609.6	615.3
+614.8	620.9
+620.4	625.8
+625.3	630.9
+630.4	637.3
+636.8	643.8
+643.3	650.3
+649.8	656.3
+655.8	662.8
+662.3	669.1
+668.6	674.6
+674.1	682.3
+681.8	689.8
+689.3	699
+698.5	708.3
+707.8	717.6
+717.1	727.9
+727.4	740
+739.5	754.7
+754.2	767
+766.5	780.4
+779.9	799.9
+799.4	831.9
+831.4	882.8
+882.3	1250
+==window setting end

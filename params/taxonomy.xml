@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<bioml label="x! taxon-to-file matching list">
+  <taxon label="mydatabase">
+    <file format="peptide" URL="c:/Inetpub/wwwroot/ISB/data/allDIAv3/20150810.mouse.cc.iRT_DECOY.fasta" />
+  </taxon>
+</bioml>
