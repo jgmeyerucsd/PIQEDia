@@ -1,0 +1,42 @@
+###input file
+FILE =C:\urineALL\mapDIA_Input.txt
+
+
+###Experimental Design
+EXPERIMENTAL_DESIGN= IndependentDesign
+
+
+### Normalization = RT 5 2
+NORMALIZATION = RT 5 2
+
+
+### Filter
+SDF=2
+MIN_CORREL=0.2
+MIN_OBS= 2 2 2
+MIN_FRAG_PER_PEP = 3
+MAX_FRAG_PER_PEP = 13
+MIN_PEP_PER_PROT = 1
+
+
+### Sample information
+LABELS=pain OC UTI
+
+###
+SIZE= 12 11 11
+
+### min. max. DE
+MIN_DE= .01
+MAX_DE =.99
+
+
+### Contrast matrix for group conversion
+CONTRAST=
+- 0 0
+1 - 0
+1 0 -
+
+
+
+### protein_level.txt
+MAX_PEP_PER_PROT = inf
