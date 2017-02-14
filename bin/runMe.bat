@@ -414,31 +414,47 @@ IF "%RunDiaUmpirePipe%"=="true" (
 		echo:
 	)
 	echo|set /p=looking for .raw files
+	echo ---------------------------------------
+	echo:
 	echo %CurrentDir%
-	
+	echo:
 	IF exist *.raw (
-		echo|set /p=Converting .raw files to .mzXML  -  
-		cd %CurrentDir%
-		IF "%CompileJava%"=="yes" javac CreateRawToMzxml.java
-		java CreateRawToMzxml %OutputDir% %CurrentDir% "%MSConvertExe%"
-		IF "%CompileJava%"=="yes" rm CreateRawToMzxml.class
-		cd %OutputDir%
-		call RawToMzxml.bat
-		cd %CurrentDir%
+		IF exist *.mzXML (
+			echo|set /p=using .mzXML files present in dir
+			echo:
+			echo|set /p= to re-convert delete .mzXML files
+		) ELSE (
+			echo|set /p=Converting .raw files to .mzXML  -  
+			cd %CurrentDir%
+			IF "%CompileJava%"=="yes" javac CreateRawToMzxml.java
+			java CreateRawToMzxml %OutputDir% %CurrentDir% "%MSConvertExe%"
+			IF "%CompileJava%"=="yes" rm CreateRawToMzxml.class
+			cd %OutputDir%
+			call RawToMzxml.bat
+			cd %CurrentDir%
 
-		echo|set /p=.RAW file conversions completed.  -  
-		time /T
-		echo ----------------------------------
-		echo:
+			echo|set /p=.RAW file conversions completed.  -  
+			time /T
+			echo ----------------------------------
+			echo:
+		)
 	) ELSE (
 		echo:
 		echo|set /p=no .raw files found
 		echo:
 	)
-
-	C:\python27\python.exe diaUmpire_pipe.py %OutputDir% "%MSConvertExe%" "%IndexMZXMLExe%" "%DIAUmpireSEJar%" "%MzxmlToMgfParams%"
-	echo:
-	echo|set /p=DIA-Umpire SE complete, converting .mgf to .mzXML
+	IF exist *Q1.mgf (
+		echo|set /p=DIA-umpire results found
+		echo:
+		echo|set /p= to re-run DIA-umpire delete results
+		echo:
+	) ELSE (
+		cd %CurrentDir%
+		echo|set /p= Running DIA-Umpire SE
+		C:\python27\python.exe diaUmpire_pipe.py %OutputDir% "%MSConvertExe%" "%IndexMZXMLExe%" "%DIAUmpireSEJar%" "%MzxmlToMgfParams%"
+		echo:
+		echo|set /p=DIA-Umpire SE complete, converting .mgf to .mzXML
+	)
 	cd %CurrentDir%
 	IF "%CompileJava%"=="yes" javac CreateMGFToMzxml.java
 	java CreateMGFToMzxml %OutputDir% %CurrentDir% "%MSConvertExe%"

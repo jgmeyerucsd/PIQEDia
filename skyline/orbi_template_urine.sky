@@ -32,11 +32,11 @@
           <regression_ce charge="3" slope="0.038" intercept="2.281" />
         </predict_collision_energy>
       </transition_prediction>
-      <transition_filter precursor_charges="2,3,4,5" product_charges="1,2" fragment_types="y,b,p" fragment_range_first="ion 3" fragment_range_last="last ion" precursor_mz_window="0" exclusion_use_dia_window="true" auto_select="true">
+      <transition_filter precursor_charges="2,3,4,5" product_charges="1,2" fragment_types="y,b,p" fragment_range_first="(m/z &gt; precursor) - 2" fragment_range_last="6 ions" precursor_mz_window="0" exclusion_use_dia_window="true" auto_select="true">
         <measured_ion name="N-terminal to Proline" cut="P" sense="N" min_length="3" />
       </transition_filter>
-      <transition_libraries ion_match_tolerance="0.055" ion_count="10" pick_from="all_plus" />
-      <transition_integration />
+      <transition_libraries ion_match_tolerance="0.055" ion_count="6" pick_from="all_plus" />
+      <transition_integration integrate_all="true" />
       <transition_instrument min_mz="50" max_mz="2000" mz_match_tolerance="0.055" />
       <transition_full_scan acquisition_method="DIA" product_mass_analyzer="centroided" product_res="30" precursor_isotopes="Count" precursor_isotope_filter="3" precursor_mass_analyzer="centroided" precursor_res="20" retention_time_filter_type="ms2_ids" retention_time_filter_length="1">
         <isotope_enrichments name="Default">
@@ -74,6 +74,6 @@
         </isolation_scheme>
       </transition_full_scan>
     </transition_settings>
-    <data_settings document_guid="e08d8bd0-6e29-4004-9329-e171891f7529" />
+    <data_settings document_guid="97d40b34-0e1b-46d8-aa4d-5843ef55c302" />
   </settings_summary>
 </srm_settings>

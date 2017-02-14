@@ -11,7 +11,8 @@ import java.io.FileWriter;
 import java.util.Scanner;
 import java.lang.Integer;
 
-public class MgfToMzxml {
+
+public class CreateMgfToMzxml {
 	
 	static StringBuffer WiffMzmlBatFile = new StringBuffer();
 	static StringBuffer WiffMzmlBatFileMain = new StringBuffer();
@@ -60,7 +61,7 @@ public class MgfToMzxml {
 	}
 	
 	private static void writeToFile( File outputDir ) {
-		String MSGFBatFilePath = outputDir.toString() + "\\MGFToMzxml.bat";
+		String MSGFBatFilePath = outputDir.toString() + "\\CreateMGFToMzxml.bat";
 		try {
 			BufferedWriter bufwriter = new BufferedWriter( new FileWriter(MSGFBatFilePath) );
 			bufwriter.write(WiffMzmlBatFileMain.toString());
