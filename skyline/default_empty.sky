@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<srm_settings format_version="3.5" software_version="Skyline (64-bit) 3.5.0.9319">
+  <settings_summary name="Default">
+    <peptide_settings>
+      <enzyme name="Trypsin" cut="KR" no_cut="P" sense="C" />
+      <digest_settings max_missed_cleavages="5" />
+      <peptide_prediction use_measured_rts="true" measured_rt_window="2" use_spectral_library_drift_times="false" />
+      <peptide_filter start="0" min_length="7" max_length="35" auto_select="true">
+        <peptide_exclusions>
+          <exclusion name="Non-acetylation" regex="[K]\[" include="true" match_mod_sequence="true" />
+          <exclusion name="C-term acetyl K" regex="K\[\+42\]$" match_mod_sequence="true" />
+        </peptide_exclusions>
+      </peptide_filter>
+      <peptide_libraries pick="library" />
+      <peptide_modifications max_variable_mods="3" max_neutral_losses="1">
+        <static_modifications>
+          <static_modification name="Carbamidomethyl (C)" aminoacid="C" formula="H3C2NO" unimod_id="4" short_name="CAM" />
+          <static_modification name="pyro-glu" aminoacid="Q" terminus="N" variable="true" massdiff_monoisotopic="-17.026549" massdiff_average="-17.026549" />
+          <static_modification name="Met ox" aminoacid="M" variable="true" formula="O" />
+          <static_modification name="Acetyl (K)" aminoacid="K" variable="true" formula="C2 H3 O -H" />
+          <static_modification name="Deamidated (NQ)" aminoacid="N, Q" variable="true" formula="O - HN" unimod_id="7" />
+          <static_modification name="Acetyl (N-term)" terminus="N" variable="true" formula="C2H2O" unimod_id="1" short_name="1Ac" />
+          <static_modification name="Pyro-carbamidomethyl (N-term C)" aminoacid="C" terminus="N" variable="true" formula="C2O" unimod_id="26" />
+          <static_modification name="Glu-&gt;pyro-Glu (N-term E)" aminoacid="E" terminus="N" variable="true" formula="-H2O" unimod_id="27" short_name="PGE" />
+        </static_modifications>
+        <heavy_modifications />
+      </peptide_modifications>
+      <peptide_integration>
+        <mprophet_peak_scoring_model name="DDA_462unique" uses_decoys="false" uses_false_targets="true" bias="-8.52605678913436">
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.MQuestIntensityCalc" weight="0.0932560726387348" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.MQuestRetentionTimePredictionCalc" weight="-0.416002563299262" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.MQuestRetentionTimeSquaredPredictionCalc" weight="NaN" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.MQuestIntensityCorrelationCalc" weight="4.74223463725701" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.MQuestWeightedShapeCalc" weight="3.0978433397661" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.MQuestWeightedCoElutionCalc" weight="NaN" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.LegacyUnforcedCountScoreCalc" weight="0.718506785857815" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.NextGenSignalNoiseCalc" weight="0.713858896992161" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.NextGenProductMassErrorCalc" weight="-0.0582554502488942" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.MQuestReferenceCorrelationCalc" weight="NaN" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.MQuestWeightedReferenceShapeCalc" weight="NaN" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.MQuestWeightedReferenceCoElutionCalc" weight="NaN" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.LegacyUnforcedCountScoreStandardCalc" weight="NaN" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.MQuestStandardIntensityCalc" weight="NaN" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.MQuestStandardIntensityCorrelationCalc" weight="NaN" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.NextGenStandardSignalNoiseCalc" weight="NaN" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.NextGenStandardProductMassErrorCalc" weight="NaN" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.MQuestStandardWeightedShapeCalc" weight="NaN" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.MQuestStandardWeightedCoElutionCalc" weight="NaN" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.NextGenCrossWeightedShapeCalc" weight="0.786613197567728" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.NextGenPrecursorMassErrorCalc" weight="-0.0164916842220819" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.NextGenIsotopeDotProductCalc" weight="1.7056122065305" />
+          <peak_feature_calculator type="pwiz.Skyline.Model.Results.Scoring.LegacyIdentifiedCountCalc" weight="NaN" />
+        </mprophet_peak_scoring_model>
+      </peptide_integration>
+    </peptide_settings>
+    <transition_settings>
+      <transition_prediction precursor_mass_type="Monoisotopic" fragment_mass_type="Monoisotopic" optimize_by="None">
+        <predict_collision_energy name="Thermo TSQ Vantage" step_size="1" step_count="5">
+          <regression_ce charge="2" slope="0.03" intercept="2.905" />
+          <regression_ce charge="3" slope="0.038" intercept="2.281" />
+        </predict_collision_energy>
+      </transition_prediction>
+      <transition_filter precursor_charges="2,3,4,5" product_charges="1,2" fragment_types="y,p,b" fragment_range_first="m/z &gt; precursor" fragment_range_last="3 ions" precursor_mz_window="0" exclusion_use_dia_window="true" auto_select="true">
+        <measured_ion name="N-terminal to Proline" cut="P" sense="N" min_length="3" />
+      </transition_filter>
+      <transition_libraries ion_match_tolerance="0.055" ion_count="10" pick_from="all" />
+      <transition_integration integrate_all="true" />
+      <transition_instrument min_mz="100" max_mz="2000" mz_match_tolerance="0.055" />
+      <transition_full_scan acquisition_method="DIA" product_mass_analyzer="tof" product_res="15000" precursor_isotopes="Count" precursor_isotope_filter="3" precursor_mass_analyzer="tof" precursor_res="20000" retention_time_filter_type="ms2_ids" retention_time_filter_length="5">
+        <isotope_enrichments name="Default">
+          <atom_percent_enrichment symbol="H'">0.98</atom_percent_enrichment>
+          <atom_percent_enrichment symbol="C'">0.995</atom_percent_enrichment>
+          <atom_percent_enrichment symbol="N'">0.995</atom_percent_enrichment>
+          <atom_percent_enrichment symbol="O&quot;">0.99</atom_percent_enrichment>
+          <atom_percent_enrichment symbol="O'">0.99</atom_percent_enrichment>
+        </isotope_enrichments>
+        <isolation_scheme name="Kac_var">
+          <isolation_window start="399.5" end="407.7" />
+          <isolation_window start="407.2" end="415.2" />
+          <isolation_window start="414.7" end="422.7" />
+          <isolation_window start="422.2" end="430.2" />
+          <isolation_window start="429.7" end="436.2" />
+          <isolation_window start="435.7" end="443.7" />
+          <isolation_window start="443.2" end="450.2" />
+          <isolation_window start="449.7" end="456.2" />
+          <isolation_window start="455.7" end="463.5" />
+          <isolation_window start="463" end="467.7" />
+          <isolation_window start="467.2" end="474.2" />
+          <isolation_window start="473.7" end="479.9" />
+          <isolation_window start="479.4" end="486.2" />
+          <isolation_window start="485.7" end="490.6" />
+          <isolation_window start="490.1" end="495.6" />
+          <isolation_window start="495.1" end="501.2" />
+          <isolation_window start="500.7" end="505.7" />
+          <isolation_window start="505.2" end="510.2" />
+          <isolation_window start="509.7" end="514.6" />
+          <isolation_window start="514.1" end="518.7" />
+          <isolation_window start="518.2" end="523.8" />
+          <isolation_window start="523.3" end="528.3" />
+          <isolation_window start="527.8" end="531.7" />
+          <isolation_window start="531.2" end="536.3" />
+          <isolation_window start="535.8" end="540.9" />
+          <isolation_window start="540.4" end="545.8" />
+          <isolation_window start="545.3" end="549.8" />
+          <isolation_window start="549.3" end="554.6" />
+          <isolation_window start="554.1" end="559.6" />
+          <isolation_window start="559.1" end="564.3" />
+          <isolation_window start="563.8" end="568.9" />
+          <isolation_window start="568.4" end="572.7" />
+          <isolation_window start="572.2" end="577.9" />
+          <isolation_window start="577.4" end="582.1" />
+          <isolation_window start="581.6" end="586.8" />
+          <isolation_window start="586.3" end="592.9" />
+          <isolation_window start="592.4" end="597.8" />
+          <isolation_window start="597.3" end="603.7" />
+          <isolation_window start="603.2" end="610.1" />
+          <isolation_window start="609.6" end="615.3" />
+          <isolation_window start="614.8" end="620.9" />
+          <isolation_window start="620.4" end="625.8" />
+          <isolation_window start="625.3" end="630.9" />
+          <isolation_window start="630.4" end="637.3" />
+          <isolation_window start="636.8" end="643.8" />
+          <isolation_window start="643.3" end="650.3" />
+          <isolation_window start="649.8" end="656.3" />
+          <isolation_window start="655.8" end="662.8" />
+          <isolation_window start="662.3" end="669.1" />
+          <isolation_window start="668.6" end="674.6" />
+          <isolation_window start="674.1" end="682.3" />
+          <isolation_window start="681.8" end="689.8" />
+          <isolation_window start="689.3" end="699" />
+          <isolation_window start="698.5" end="708.3" />
+          <isolation_window start="707.8" end="717.6" />
+          <isolation_window start="717.1" end="727.9" />
+          <isolation_window start="727.4" end="740" />
+          <isolation_window start="739.5" end="754.7" />
+          <isolation_window start="754.2" end="767" />
+          <isolation_window start="766.5" end="780.4" />
+          <isolation_window start="779.9" end="799.9" />
+          <isolation_window start="799.4" end="831.9" />
+          <isolation_window start="831.4" end="882.8" />
+          <isolation_window start="882.3" end="1250" />
+        </isolation_scheme>
+      </transition_full_scan>
+    </transition_settings>
+    <data_settings>
+      <annotation name="annotation_QValue" targets="precursor_result" type="number" />
+      <annotation name="annotation_Score" targets="precursor_result" type="number" />
+    </data_settings>
+  </settings_summary>
+</srm_settings>

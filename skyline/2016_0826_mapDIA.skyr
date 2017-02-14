@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<views>
+  <view name="2016_0826_mapDIA" rowsource="pwiz.Skyline.Model.Databinding.Entities.Transition" sublist="">
+    <column name="Precursor.Peptide.ModifiedSequence" />
+    <column name="Precursor.Peptide.Sequence" />
+    <column name="Precursor.Peptide.Protein.Name" caption="Protein" />
+    <column name="ProductMz" />
+    <column name="Precursor.Peptide.BeginPos" />
+    <column name="Precursor.Peptide.EndPos" />
+    <column name="Precursor.Peptide.AverageMeasuredRetentionTime" />
+    <column name="Results!*.Value.Area" />
+  </view>
+</views>
