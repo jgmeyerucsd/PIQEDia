@@ -11,7 +11,7 @@ import java.io.FileWriter;
 import java.util.Scanner;
 import java.lang.Integer;
 
-public class CreateRawToMzxml {
+public class MgfToMzxml {
 	
 	static StringBuffer WiffMzmlBatFile = new StringBuffer();
 	static StringBuffer WiffMzmlBatFileMain = new StringBuffer();

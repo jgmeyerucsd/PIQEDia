@@ -29,7 +29,7 @@ skylineFastaDirText::C:\Users\jmeyer\Documents\GitHub\DIA-Pipe-orbi\inputs\20161
 skylineTemplateDocText::C:\urineALL\orbi_template_urine.sky
 skylineXMLFileText::default
 ptmProphetExeText::C:\Inetpub\tpp-bin\PTMProphetParser.exe
-ptmProphetParserMassesText::STY,79.966
+ptmProphetParserMassesText::STY,79.966,M,15.994915
 ptmProphetParserMZTOLText::0.055
-ptmProphetParserMINPROBText::0.7
+ptmProphetParserMINPROBText::0.9
 mapDIALabelsText::mapDIALabels

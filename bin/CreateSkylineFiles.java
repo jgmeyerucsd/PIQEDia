@@ -42,7 +42,7 @@ public class CreateSkylineFiles {
 		skylineFastaPath = args[3];
 		skylineTemplateDoc = args[4];
 		skylineXMLFile = args[5];
-		skylineSaveFilePath = outputDirStr + skylineTemplateDoc;
+		skylineSaveFilePath = skylineTemplateDoc;
 		skylineBatFilePath = outputDirStr + "\\skyline.bat";
 		skylineCommandsTxtFilePath = outputDirStr + "\\skylinerunnercmds.txt";
 		
