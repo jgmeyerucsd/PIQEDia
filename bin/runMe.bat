@@ -617,9 +617,9 @@ IF "%RunProphet%"=="true" (
 	echo|set /p=Creating Peptide Prophet .bat file.  -  
 	time /T
 	echo -----------------------------------
-	IF "%CompileJava%"=="yes" javac CreatePeptideProphetBat.java
-	java mPCreatePeptideProphetBat %OutputDir% %XinteractExe% %NumOfThreads%
-	IF "%CompileJava%"=="yes" rm CreatePeptideProphetBat.class
+	IF "%CompileJava%"=="yes" javac mPCreatePeptideProphetBat.java
+	java mPCreatePeptideProphetBat %OutputDir% %XinteractExe% %NumOfThreads% %CurrentDir%
+	IF "%CompileJava%"=="yes" rm mPCreatePeptideProphetBat.class
 
 	echo|set /p=Running Peptide Prophet .bat file.  -  
 	time /T

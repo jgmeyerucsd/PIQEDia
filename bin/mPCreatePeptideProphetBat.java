@@ -12,20 +12,24 @@ import java.util.Scanner;
 
 
 
-public class CreatePeptideProphetBat {
+public class mPCreatePeptideProphetBat {
 	static String outputDirStr;
 	static String peptideProphetBatPath;
 	static String xinteractPath;
+	static String mParallelPath;
 	static StringBuffer peptideProphetMSGF = new StringBuffer();
 	static StringBuffer peptideProphetTandem = new StringBuffer();
 	static StringBuffer peptideProphetComet = new StringBuffer();
 	static StringBuffer peptideProphetMain = new StringBuffer();
-	static String cores = args[2];
+	static String cores;
 	static int numOfFiles;
 	
 	public static void main( String [] args ) {
 		outputDirStr = args[0];
 		xinteractPath = args[1].replace(".exe", "");
+		cores = args[2];
+		String mParallelPath = args[3]+"\\mParallel\\MParallel.exe";
+		
 		peptideProphetBatPath = outputDirStr + "\\peptideProphet.bat";
 		
 		File outputDir = new File(outputDirStr);
@@ -97,7 +101,7 @@ public class CreatePeptideProphetBat {
 				peptideProphetComet.append(" ");
 				peptideProphetComet.append(file.getName());
 				peptideProphetComet.append(" : ");
-				numOfFiles==;
+				numOfFiles++;
 			}
 		}
 		if(numOfFiles != 0) {
