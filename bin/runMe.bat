@@ -453,7 +453,6 @@ IF "%RunDiaUmpirePipe%"=="true" (
 	)
 
 	IF exist *Q1.mgf (
-		pause
 		echo|set /p=DIA-umpire results found
 		echo:
 		echo ----------------------------------
@@ -485,7 +484,6 @@ IF "%RunDiaUmpirePipe%"=="true" (
 	echo -----------------------------
 	echo:
 	echo:
-	pause
 ) ELSE (
 	echo|set /p=The DiaUmpire pipeline did not run.  -  
 	time /T
