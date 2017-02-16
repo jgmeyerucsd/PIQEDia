@@ -32,11 +32,8 @@ public class CreateiProphetBat {
 				numOfFiles++;
 				
 				if( numOfFiles == 1 ) {
-					iProphetBatFile.append(interProphetParser);
+					iProphetBatFile.append(interProphetParser).append(" ");
 				}
-				
-				iProphetBatFile.append(" ");
-				iProphetBatFile.append(file.getName());
 			}
 		}
 		
@@ -44,7 +41,7 @@ public class CreateiProphetBat {
 			iProphetBatFile.delete(0, iProphetBatFile.length());
 		}
 		else {
-			iProphetBatFile.append(" ");
+			iProphetBatFile.append("THREADS=16 ").append("interact*.pep.xml ");
 			iProphetBatFile.append("ipro-output-file.pep.xml\r\n");
 		}
 		
