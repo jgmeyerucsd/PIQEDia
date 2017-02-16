@@ -421,10 +421,15 @@ IF "%RunDiaUmpirePipe%"=="true" (
 	IF exist *.raw (
 		IF exist *.mzXML (
 			echo|set /p=using .mzXML files present in dir
+			echo ----------------------------------
 			echo:
 			echo|set /p= to re-convert delete .mzXML files
+			echo ----------------------------------
+			echo:
 		) ELSE (
 			echo|set /p=Converting .raw files to .mzXML  -  
+			echo ----------------------------------
+			echo:
 			cd %CurrentDir%
 			IF "%CompileJava%"=="yes" javac CreateRawToMzxml.java
 			java CreateRawToMzxml %OutputDir% %CurrentDir% "%MSConvertExe%"
@@ -432,7 +437,6 @@ IF "%RunDiaUmpirePipe%"=="true" (
 			cd %OutputDir%
 			call RawToMzxml.bat
 			cd %CurrentDir%
-
 			echo|set /p=.RAW file conversions completed.  -  
 			time /T
 			echo ----------------------------------
@@ -441,33 +445,41 @@ IF "%RunDiaUmpirePipe%"=="true" (
 	) ELSE (
 		echo:
 		echo|set /p=no .raw files found
+		echo ----------------------------------
 		echo:
 	)
+	pause
 	IF exist *Q1.mgf (
+		pause
 		echo|set /p=DIA-umpire results found
+		echo ----------------------------------
 		echo:
 		echo|set /p= to re-run DIA-umpire delete results
+		echo ----------------------------------
 		echo:
 	) ELSE (
 		cd %CurrentDir%
 		echo|set /p= Running DIA-Umpire SE
+		echo ----------------------------------
 		C:\python27\python.exe diaUmpire_pipe.py %OutputDir% "%MSConvertExe%" "%IndexMZXMLExe%" "%DIAUmpireSEJar%" "%MzxmlToMgfParams%"
 		echo:
 		echo|set /p=DIA-Umpire SE complete, converting .mgf to .mzXML
+		echo ----------------------------------
 	)
+	pause
 	cd %CurrentDir%
-	IF "%CompileJava%"=="yes" javac CreateMGFToMzxml.java
-	java CreateMGFToMzxml %OutputDir% %CurrentDir% "%MSConvertExe%"
-	IF "%CompileJava%"=="yes" rm CreateMGFToMzxml.class
+	IF "%CompileJava%"=="yes" javac CreateMgfToMzxml.java
+	java CreateMgfToMzxml %OutputDir% %CurrentDir% "%MSConvertExe%"
+	IF "%CompileJava%"=="yes" rm CreateMgfToMzxml.class
 	cd %OutputDir%
-	call CreateMGFToMzxml.bat
+	call CreateMgfToMzxml.bat
 	cd %CurrentDir%
 	echo|set /p=completed file conversions  -  
 	time /T
 	echo -----------------------------
 	echo:
 	echo:
-	
+	pause
 ) ELSE (
 	echo|set /p=The DiaUmpire pipeline did not run.  -  
 	time /T
@@ -633,9 +645,9 @@ IF "%RunProphet%"=="true" (
 	echo|set /p=Creating Peptide Prophet .bat file.  -  
 	time /T
 	echo -----------------------------------
-	IF "%CompileJava%"=="yes" javac mPCreatePeptideProphetBat.java
-	java mPCreatePeptideProphetBat %OutputDir% %XinteractExe% %NumOfThreads% %CurrentDir%
-	IF "%CompileJava%"=="yes" rm mPCreatePeptideProphetBat.class
+	IF "%CompileJava%"=="yes" javac CreatePeptideProphetBatmP.java
+	java CreatePeptideProphetBatmP %OutputDir% %XinteractExe% %NumOfThreads% %CurrentDir%
+	IF "%CompileJava%"=="yes" rm CreatePeptideProphetBatmP.class
 
 	echo|set /p=Running Peptide Prophet .bat file.  -  
 	time /T

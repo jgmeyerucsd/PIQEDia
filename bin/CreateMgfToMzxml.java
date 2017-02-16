@@ -61,7 +61,7 @@ public class CreateMgfToMzxml {
 	}
 	
 	private static void writeToFile( File outputDir ) {
-		String MSGFBatFilePath = outputDir.toString() + "\\CreateMGFToMzxml.bat";
+		String MSGFBatFilePath = outputDir.toString() + "\\CreateMgfToMzxml.bat";
 		try {
 			BufferedWriter bufwriter = new BufferedWriter( new FileWriter(MSGFBatFilePath) );
 			bufwriter.write(WiffMzmlBatFileMain.toString());

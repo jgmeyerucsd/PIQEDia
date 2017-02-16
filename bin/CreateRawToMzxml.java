@@ -50,6 +50,7 @@ public class CreateRawToMzxml {
 			WiffMzmlBatFileMain.append(mParallelPath).append(" ");
 			WiffMzmlBatFileMain.append("--count=" + 16 + " ");
 			WiffMzmlBatFileMain.append("--logfile=mparallel.log ");
+			WiffMzmlBatFileMain.append("--priority=4 ");
 			WiffMzmlBatFileMain.append("--shell ");
 			WiffMzmlBatFileMain.append(WiffMzmlBatFile);
 			WiffMzmlBatFileMain.delete(WiffMzmlBatFileMain.length()-3, WiffMzmlBatFileMain.length());

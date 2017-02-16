@@ -26,7 +26,7 @@ InterProphetParserDirText::C:\Inetpub\tpp-bin\InterProphetParser.exe
 skylineRunnerExePathText::C:\SkylineRunner35.exe
 skylineReportNameText::2016_0826_mapDIA
 skylineFastaDirText::C:\Users\jmeyer\Documents\GitHub\DIA-Pipe-orbi\inputs\20161213.human.fasta
-skylineTemplateDocText::C:\urineALL\orbi_template_urine.sky
+skylineTemplateDocText::C:\urine_test1\orbi_template_urine.sky
 skylineXMLFileText::default
 ptmProphetExeText::C:\Inetpub\tpp-bin\PTMProphetParser.exe
 ptmProphetParserMassesText::STY:79.9663:-97.9769:-115.988,M:15.9949:-63.998286:-81.0248:-82.0885

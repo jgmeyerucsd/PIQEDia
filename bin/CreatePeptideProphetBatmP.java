@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 
 
-public class mPCreatePeptideProphetBat {
+public class CreatePeptideProphetBatmP {
 	static String outputDirStr;
 	static String peptideProphetBatPath;
 	static String xinteractPath;
@@ -45,8 +45,19 @@ public class mPCreatePeptideProphetBat {
 				peptideProphetMSGF.append(" -p0.01 -l7 -c2.5 -eT -PPM -I1 -PPM -OAPd -dXXX_");
 				peptideProphetMSGF.append(" ");
 				peptideProphetMSGF.append(file.getName());
-				peptideProphetMSGF.append("  :  ");
+				peptideProphetMSGF.append(" : ");
 				numOfFiles++;
+				if(peptideProphetMSGF.length() >7000 && numOfFiles !=0){
+					peptideProphetMain.append(mParallelPath).append(" ");
+					peptideProphetMain.append("--count=" + cores + " ");
+					peptideProphetMain.append("--shell ");
+					peptideProphetMain.append("--logfile=mparallel.log ");
+					peptideProphetMain.append(peptideProphetMSGF);
+					peptideProphetMain.delete(peptideProphetMain.length()-3, peptideProphetMain.length());
+					peptideProphetMain.append("\r\n");
+					peptideProphetMSGF.delete(0,peptideProphetMSGF.length());
+					numOfFiles = 0;
+				}	
 			}
 		}
 		//insert part1 building main
@@ -57,7 +68,7 @@ public class mPCreatePeptideProphetBat {
 			peptideProphetMain.append("--shell ");
 			peptideProphetMain.append("--logfile=mparallel.log ");
 			peptideProphetMain.append(peptideProphetMSGF);
-			//peptideProphetMain.delete(peptideProphetMain.length()-3, peptideProphetMain.length());
+			peptideProphetMain.delete(peptideProphetMain.length()-3, peptideProphetMain.length());
 			peptideProphetMain.append("\r\n");
 
 		}
@@ -77,6 +88,17 @@ public class mPCreatePeptideProphetBat {
 				peptideProphetTandem.append(file.getName());
 				peptideProphetTandem.append(" : ");
 				numOfFiles++;
+				if(peptideProphetTandem.length() >7000 && numOfFiles !=0){
+					peptideProphetMain.append(mParallelPath).append(" ");
+					peptideProphetMain.append("--count=" + cores + " ");
+					peptideProphetMain.append("--shell ");
+					peptideProphetMain.append("--logfile=mparallel.log ");
+					peptideProphetMain.append(peptideProphetTandem);
+					peptideProphetMain.delete(peptideProphetMain.length()-3, peptideProphetMain.length());
+					peptideProphetMain.append("\r\n");
+					peptideProphetTandem.delete(0,peptideProphetTandem.length());
+					numOfFiles = 0;
+				}	
 			}
 		}
 		if(numOfFiles != 0) {
@@ -103,6 +125,17 @@ public class mPCreatePeptideProphetBat {
 				peptideProphetComet.append(file.getName());
 				peptideProphetComet.append(" : ");
 				numOfFiles++;
+				if(peptideProphetComet.length() >7000 && numOfFiles !=0){
+					peptideProphetMain.append(mParallelPath).append(" ");
+					peptideProphetMain.append("--count=" + cores + " ");
+					peptideProphetMain.append("--shell ");
+					peptideProphetMain.append("--logfile=mparallel.log ");
+					peptideProphetMain.append(peptideProphetComet);
+					peptideProphetMain.delete(peptideProphetMain.length()-3, peptideProphetMain.length());
+					peptideProphetMain.append("\r\n");
+					peptideProphetComet.delete(0,peptideProphetComet.length());
+					numOfFiles = 0;
+				}	
 			}
 		}
 		if(numOfFiles != 0) {
