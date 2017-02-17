@@ -780,7 +780,7 @@ IF "%RunMapDia%"=="true" (
 	IF "%MapDIA_SkylineReport%"=="empty" (
 		%CurrentDir%\mapDia.exe mapDIA.parameters
 	) ELSE (
-		echo|set /p=Running mapDIA.py  -  
+		echo|set /p=Running R filter and reformat  -  
 		time /T
 		echo -----------------
 		Rscript PrepMapDIAin.R %MapDIA_PTM_ProphetReport% %MapDIA_SkylineReport% %MapDIA_minPtmProphet% %MapDIAmasses% %OutputDir%

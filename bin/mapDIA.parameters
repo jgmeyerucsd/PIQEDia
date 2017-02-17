@@ -20,10 +20,10 @@ MIN_PEP_PER_PROT = 1
 
 
 ### Sample information
-LABELS=pain OC UTI
+LABELS= pain OC UTI
 
 ###
-SIZE= 12 11 11
+SIZE= 12 12 11
 
 ### min. max. DE
 MIN_DE= .01

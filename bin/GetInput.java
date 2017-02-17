@@ -1810,7 +1810,7 @@ public class GetInput extends JPanel {
     	mapDIAFileStrBuf.append("MIN_PEP_PER_PROT = 1").append("\r\n");
     	mapDIAFileStrBuf.append("\r\n").append("\r\n");
     	mapDIAFileStrBuf.append("### Sample information").append("\r\n");
-    	mapDIAFileStrBuf.append("LABELS=");
+    	mapDIAFileStrBuf.append("LABELS= ");
     	for(int index = 0; index < mapDiaLabels.size(); index++) {
         	mapDIAFileStrBuf.append(mapDiaLabels.get(index));
         	if(index != mapDiaLabels.size()-1) {

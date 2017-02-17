@@ -97,7 +97,7 @@ mod.position.pep=function(charseq="GK[+42]GK[+42]GQK[+42]R",modmass="[+42]"){
 ####################################################################################
 
 
-protlvlcorrection = function(sitelevels=mapDIAinput, proteinlevels="proteinlvl.txt",dir="C:/urineALL/"){
+protlvlcorrection = function(sitelevels=mapDIAinput, proteinlevels="proteinlevels.txt",params="C:/urineALL/mapDIA.params",dir="C:/urineALL/"){
   #head(mapDIAinput)
   #### run names must be in the same order for both matricies
   setwd(dir)
@@ -141,6 +141,20 @@ protlvlcorrection = function(sitelevels=mapDIAinput, proteinlevels="proteinlvl.t
   normalized.final[normalized.final=="Inf"]<-"NA"
   write.table(file=fileout,normalized.final,row.names = F,quote=F,sep="\t")
 }
+
+
+################## little helper function
+
+get.labels=function(con="C:/urineALL/mapDIA.parameters"){
+  lines<-readLines(con)
+  label.line<-grep("LABELS=",lines)
+  label.vec<-unlist(strsplit(lines[label.line],split=" "))
+  label.vec<-label.vec[2:length(label.vec)]
+  return(mapping.table)
+}
+
+
+
 
 ##################################################################################################################
 ############### main function 
@@ -229,10 +243,21 @@ prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep
   RTcol<-grep("Average.Measured.Retention.Time",names(s.uni))
   head(s.uni)
   m.temp1<-s.uni[,c("uniprot_site","Peptide.Modified.Sequence","Product.Mz")]
-  m.temp2<-s.uni[,c(area.columns,RTcol)]
-  mapDIAinput<-cbind(m.temp1,m.temp2)
+  
+  ################################################################################
+  ### reorder area columns by group
+  groups<-get.labels(paste(wd,"mapDIA.parameters",collapse="",sep=""))
+  for(i in 1:length(groups)){
+    print(i)
+    #group.columns[[i]]<-grep(groups[i],names(pl))
+    m.temp1<-cbind(m.temp1,s.uni[,grep(groups[i],names(s.uni))])
+  }
+  
+  #m.temp2<-s.uni[,c(area.columns,RTcol)]
+  mapDIAinput<-cbind(m.temp1,s.uni[,RTcol])
+  names(mapDIAinput)[length(names(mapDIAinput))]<-"RT"
   #head(mapDIAinput)
-  write.csv(skyline.mod.results.summary,file="C:/skylineModResultsSummary.csv",row.names = F, quote=F)
+  #write.csv(skyline.mod.results.summary,file="C:/skylineModResultsSummary.csv",row.names = F, quote=F)
   #### write the output file
   #### currently this just tests that it can be written need to re-format
   #colnames(cleaned)<-"peptide.sequence"
@@ -272,7 +297,7 @@ if(length(nameMapFile)==1){
   print("condition name mapping file available")
 }
 #### check if protein level quantification file exists, and if so, correct files to protein level
-protlvlfile<-list.files(pattern="proteinlevel.txt")
+protlvlfile<-list.files(pattern="proteinlevels.txt")
 correct=FALSE
 if(length(protlvlfile)==1){
   print("protein levels available")
