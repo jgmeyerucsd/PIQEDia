@@ -137,9 +137,10 @@ protlvlcorrection = function(sitelevels=mapDIAinput, proteinlevels="proteinlevel
   rn<-merged[,c("uniprot_site", "Peptide.Modified.Sequence", "Product.Mz")]
   normalized.final <- cbind(rn, normalized,RT=merged[,"RT"])
   head(normalized.final)
-  fileout=paste(dir,"mapDIA_input.txt",sep="",col="")
+  #fileout=paste(dir,"mapDIA_input.txt",sep="",col="")
   normalized.final[normalized.final=="Inf"]<-"NA"
-  write.table(file=fileout,normalized.final,row.names = F,quote=F,sep="\t")
+  #write.table(file=fileout,normalized.final,row.names = F,quote=F,sep="\t")
+  normalized.final
 }
 
 
@@ -150,7 +151,7 @@ get.labels=function(con="C:/urineALL/mapDIA.parameters"){
   label.line<-grep("LABELS=",lines)
   label.vec<-unlist(strsplit(lines[label.line],split=" "))
   label.vec<-label.vec[2:length(label.vec)]
-  return(mapping.table)
+  return(label.vec)
 }
 
 
@@ -161,74 +162,68 @@ get.labels=function(con="C:/urineALL/mapDIA.parameters"){
 #############################################
 ####################################################################################
 
-
-prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep.xml", 
-                            skyline.output= "C:/urineALL/2016_0826_mapDIA.csv", 
+#ptmProphName ="C:/urineALL/ptmProphet-output-file.ptm.pep.xml"
+prepMapDIAin=function(ptmProphName = "", 
+                            skyline.output= "C:/BAT/2016_0826_mapDIA_acetyl.csv", 
                             ptm.score=0.95,
-                            modstring= "STY79.966",
-                            wd="C:/urineALL/",
-                            namemapping=FALSE,
+                            modstring= "K42.01",
+                            wd="C:/BAT/",
+                            namemapping=nm,
                             protlvl.correction=FALSE)
   {
   setwd(wd)
-  ### check for xml package otherwise install
-  if(library(XML,logical.return=T)==FALSE) install.packages("XML")
-  if(library(XML, logical.return = T)==TRUE) require(XML)
-  print("reading ptm prophet output")
-  doc<-xmlParse(ptmProphName)
-  ptm.score<-as.numeric(ptm.score)
-  namespaces<-c(ns="http://regis-web.systemsbiology.net/pepXML")
-  tides = unlist(xpathApply(doc, "//ns:ptmprophet_result[@ptm='PTMProphet_STY79.966']", xmlGetAttr, "ptm_peptide", namespaces = namespaces ))
-  cleaned<-sapply(FUN=gsub,"([(])([0-9])(.)([0-9]+)())",x=tides,replacement="")
-  probstrings<-gsub("[A-Z]+", "", tides)
-  probstr.a<-strsplit(probstrings,split="[\\)\\(]")
-  #tides[689]
-  #cleaned[689]
-  #probstr.a[lapply( FUN=nchar, probstr.a)>0]
-  #probstrings[689]
-  #probstr.a[689]
-  for(i in 1:length(probstr.a)){
-    probstr.a[[i]]<-probstr.a[[i]][nchar(probstr.a[[i]])>0]
-    #as.numeric(probstr.a)
-    
-  }
-  probstr<-lapply(FUN=as.numeric,probstr.a)
-  probsumlist<-lapply(FUN=sum,probstr)
-  ptms.localized<-rep(0,times=length(probstr))
-  for(i in 1:length(probstr)){
-    ptms.localized[i]<-length(which(probstr[[i]]>ptm.score))==round(probsumlist[[i]],digits=0)
-    #probsumlist[[i]]
-  }
-  ptm.localized.summary<-data.frame(peptide.full=tides,pep.cleaned=cleaned,is.localized=ptms.localized)
-  ptm.localized.true<-ptm.localized.summary[ptm.localized.summary[,3]==1,]
-  #nrow(ptm.localized.true)
-  #head(ptm.localized.true)
-  
   
   #### read in skyline file, reformat, check which lines are significant in the ptmprophet
   #### alternately, this could be done as a connection instead of into memory
   print("reading skyline report")
   skyline.raw<-read.csv(skyline.output,stringsAsFactors = F,header = T)
-  #head(skyline.raw)
   modmass<-as.numeric(gsub("[A-Z]", "", modstring))
   modmass4sky<-paste("+",round(modmass),collapse = "",sep="")
   modmass4reformat<-paste("[","+",round(modmass),"]",collapse = "",sep="")
-  skyline.raw[,1]
   unique.peps<-unique(skyline.raw[,1])
   mod.peps.full<-unique.peps[grepl(unique.peps,pattern=modmass4sky)]
-  mod.peps.full
   mod.peps.cleaned<-gsub("(\\[)[-+][0-9]+(\\])","",mod.peps.full)
-  mod.peps.full
   nmods<-sapply(regmatches(mod.peps.full, gregexpr(modmass4sky, mod.peps.full)), length)
   skyline.mod.results.summary<-data.frame(mod.peps.full,mod.peps.cleaned,nmods)
-  match(skyline.mod.results.summary[,2],ptm.localized.true[,2])
-  ### compare the two lists of peptides
-  skyline.mod.results.summary[is.na(match(skyline.mod.results.summary[,2],ptm.localized.true[,2])),]
-  #ptm.localized.true[is.na(match(ptm.localized.true[,2],skyline.mod.results.summary[,2])),]
-  skyline.localized<-skyline.mod.results.summary[is.na(match(skyline.mod.results.summary[,2],ptm.localized.true[,2]))==FALSE,]
-  keep<-as.character(skyline.localized[,1])
-  skyline.filtered<-skyline.raw[is.na(match(skyline.raw[,1],keep))==FALSE,]
+  
 
+  
+  if(nchar(ptmProphName)>7){    #### check if there was a real pep.xml file input
+    ### check for xml package otherwise install
+    if(library(XML,logical.return=T)==FALSE) install.packages("XML")
+    if(library(XML, logical.return = T)==TRUE) require(XML)
+    print("using PTMprophet localization filter")
+    doc<-xmlParse(ptmProphName)
+    ptm.score<-as.numeric(ptm.score)
+    namespaces<-c(ns="http://regis-web.systemsbiology.net/pepXML")
+    tides = unlist(xpathApply(doc, "//ns:ptmprophet_result[@ptm='PTMProphet_STY79.966']", xmlGetAttr, "ptm_peptide", namespaces = namespaces ))
+    cleaned<-sapply(FUN=gsub,"([(])([0-9])(.)([0-9]+)())",x=tides,replacement="")
+    probstrings<-gsub("[A-Z]+", "", tides)
+    probstr.a<-strsplit(probstrings,split="[\\)\\(]")
+    for(i in 1:length(probstr.a)){
+      probstr.a[[i]]<-probstr.a[[i]][nchar(probstr.a[[i]])>0]
+    }
+    
+    probstr<-lapply(FUN=as.numeric,probstr.a)
+    probsumlist<-lapply(FUN=sum,probstr)
+    ptms.localized<-rep(0,times=length(probstr))
+    for(i in 1:length(probstr)){
+      ptms.localized[i]<-length(which(probstr[[i]]>ptm.score))==round(probsumlist[[i]],digits=0)
+      #probsumlist[[i]]
+    }
+    ptm.localized.summary<-data.frame(peptide.full=tides,pep.cleaned=cleaned,is.localized=ptms.localized)
+    ptm.localized.true<-ptm.localized.summary[ptm.localized.summary[,3]==1,]
+    #nrow(ptm.localized.true)
+    #head(ptm.localized.true)
+    #ptm.localized.true[is.na(match(ptm.localized.true[,2],skyline.mod.results.summary[,2])),]
+    skyline.localized<-skyline.mod.results.summary[is.na(match(skyline.mod.results.summary[,2],ptm.localized.true[,2]))==FALSE,]
+    keep<-as.character(skyline.localized[,1])
+    skyline.filtered<-skyline.raw[is.na(match(skyline.raw[,1],keep))==FALSE,]
+  }
+  
+  if(nchar(ptmProphName)<7){      ### if the PTMprophet file not given, just rename skyline data.frame
+    skyline.filtered<-skyline.raw[is.na(match(skyline.raw[,1],mod.peps.full))==FALSE,]
+  }
   
   ### reformat filtered report
   proteins<-substr(start=4,stop=9,x=skyline.filtered[,"Protein"])
@@ -241,20 +236,10 @@ prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep
   names(s.uni)[1] <- "uniprot_site"
   area.columns<-grep("Area",names(s.uni))
   RTcol<-grep("Average.Measured.Retention.Time",names(s.uni))
-  head(s.uni)
   m.temp1<-s.uni[,c("uniprot_site","Peptide.Modified.Sequence","Product.Mz")]
-  
-  ################################################################################
-  ### reorder area columns by group
-  groups<-get.labels(paste(wd,"mapDIA.parameters",collapse="",sep=""))
-  for(i in 1:length(groups)){
-    print(i)
-    #group.columns[[i]]<-grep(groups[i],names(pl))
-    m.temp1<-cbind(m.temp1,s.uni[,grep(groups[i],names(s.uni))])
-  }
-  
+  tmp<-cbind(m.temp1,s.uni[,area.columns])
   #m.temp2<-s.uni[,c(area.columns,RTcol)]
-  mapDIAinput<-cbind(m.temp1,s.uni[,RTcol])
+  mapDIAinput<-cbind(tmp,s.uni[,RTcol])
   names(mapDIAinput)[length(names(mapDIAinput))]<-"RT"
   #head(mapDIAinput)
   #write.csv(skyline.mod.results.summary,file="C:/skylineModResultsSummary.csv",row.names = F, quote=F)
@@ -267,18 +252,51 @@ prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep
   mapDIAinput[mapDIAinput=="#N/A"]<-"NA"
   names(mapDIAinput)[length(names(mapDIAinput))]<-"RT"
   
-  #### without protein level correction
-  if(protlvl.correction==FALSE){
-    print("writing mapDIA input file")
-    fileout<-paste(wd,"mapDIA_Input.txt",sep="",collapse = "")
-    write.table(file=fileout,mapDIAinput,row.names = F,quote=F,sep="\t")
-  }
+
   #### with protein level correction
   if(protlvl.correction==TRUE){
     print("correcting protein levels")
-    protlvlcorrection(sitelevels=mapDIAinput, proteinlevels="proteinlevel.txt",dir=wd)
+    mapDIAinput<-protlvlcorrection(sitelevels=mapDIAinput, proteinlevels="proteinlevel.txt",dir=wd)
   }
   
+  ##### finally, assign name mapping table if provided
+  ################################################################################
+  ### reorder area columns by group
+  
+  
+  ### if namemapping file exists, replace columns with group headers
+  if(namemapping==TRUE){
+    namemap<-read.delim("name_mapping.txt",header = T,stringsAsFactors = F,colClasses = "character")
+    n.groups<-ncol(namemap)
+    groups<-colnames(namemap)
+    for(x in groups){
+      tmp.grp.nm<-namemap[,x][nchar(namemap[,x])>1]
+      grp.cols<-grep(paste(tmp.grp.nm,sep="|",collapse = "|"), colnames(mapDIAinput))
+      i=1
+      for(y in grp.cols){
+        colnames(mapDIAinput)[y]<-paste(x,i,sep = ".")
+        i=i+1
+      }
+    }
+  }
+  
+
+  groups<-get.labels(con=paste(wd,"mapDIA.parameters",collapse="",sep=""))
+  head(mapDIAinput)
+  tmp<-mapDIAinput[,1:3]
+  for(i in 1:length(groups)){
+    print(i)
+     tmp<-cbind(tmp,mapDIAinput[,grep(paste(groups[i],"",sep="."),names(mapDIAinput),fixed=T,value=T)])
+  }
+  head(tmp)
+  tmp<-cbind(tmp,"RT"=mapDIAinput[,"RT"])
+  
+  finalout<-tmp
+  #### without protein level correction
+
+  print("writing mapDIA input file")
+  fileout<-paste(wd,"mapDIA_Input.txt",sep="",collapse = "")
+  write.table(file=fileout, finalout,row.names = F,quote=F,sep="\t")
   #return(mapDIAinput)
 }
 
@@ -292,9 +310,11 @@ setwd(args[5])
 #setwd("C:/urineALL/")
 #getwd()
 #### check for name mapping file exist, if so, fix column names to name map
-nameMapFile<-list.files(pattern="nameMapping.txt")
+nameMapFile<-list.files(pattern="name_mapping.txt")
+nm=FALSE
 if(length(nameMapFile)==1){
   print("condition name mapping file available")
+  nm=TRUE
 }
 #### check if protein level quantification file exists, and if so, correct files to protein level
 protlvlfile<-list.files(pattern="proteinlevels.txt")
