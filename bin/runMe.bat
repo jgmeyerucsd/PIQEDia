@@ -473,9 +473,9 @@ IF "%RunDiaUmpirePipe%"=="true" (
 		echo ----------------------------------
 	)
 	cd %CurrentDir%
-	IF "%CompileJava%"=="yes" javac CreateMgfToMzxml.java
-	java CreateMgfToMzxml %OutputDir% %CurrentDir% "%MSConvertExe%"
-	IF "%CompileJava%"=="yes" rm CreateMgfToMzxml.class
+	IF "%CompileJava%"=="yes" javac CreateMgfToMzxmlMp.java
+	java CreateMgfToMzxmlMp %OutputDir% %CurrentDir% "%MSConvertExe%" %NumOfThreads%
+	IF "%CompileJava%"=="yes" rm CreateMgfToMzxmlMp.class
 	cd %OutputDir%
 	call CreateMgfToMzxml.bat
 	cd %CurrentDir%

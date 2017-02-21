@@ -164,12 +164,12 @@ get.labels=function(con="C:/urineALL/mapDIA.parameters"){
 
 #ptmProphName ="C:/urineALL/ptmProphet-output-file.ptm.pep.xml"
 prepMapDIAin=function(ptmProphName = "", 
-                            skyline.output= "C:/BAT/2016_0826_mapDIA_acetyl.csv", 
+                            skyline.output= "C:/BAT/2016_0826_mapDIA_succinyl.csv", 
                             ptm.score=0.95,
-                            modstring= "K42.01",
+                            modstring= "K100.0",
                             wd="C:/BAT/",
                             namemapping=nm,
-                            protlvl.correction=FALSE)
+                            protlvl.correction=TRUE)
   {
   setwd(wd)
   
@@ -300,7 +300,7 @@ prepMapDIAin=function(ptmProphName = "",
   #return(mapDIAinput)
 }
 
-
+#prepMapDIAin()
 
 
 ############################################################################
