@@ -1,5 +1,5 @@
 ###input file
-FILE =C:\urineALL\mapDIA_Input.txt
+FILE =C:\urine_test2\\mapDIA_Input.txt
 
 
 ###Experimental Design
@@ -20,10 +20,10 @@ MIN_PEP_PER_PROT = 1
 
 
 ### Sample information
-LABELS= pain OC UTI
+LABELS= pain UTI OC
 
 ###
-SIZE= 12 12 11
+SIZE= 3 3 3
 
 ### min. max. DE
 MIN_DE= .01

@@ -313,7 +313,7 @@ if(length(args)==5){
 
 
 
-#prepMapDIAin(protlvl.correction = correct)
+#prepMapDIAin(ptmProphName = "C:/urine_test2/ptmProphet-output-file.ptm.pep.xml",skyline.output = "C:/urine_test2/2016_0826_mapDIA.csv", wd = "C:/urine_test2/", protlvl.correction = FALSE)
 
 
 
