@@ -106,7 +106,14 @@ mod.tides = unlist(xpathApply(doc, "//ns:ptmprophet_result[@ptm='PTMProphet_STY7
   ptmp.nodes<-xpathApply(doc, "//ns:ptmprophet_result[@ptm='PTMProphet_STY79.966']", getNodeSet, namespaces = namespaces )
   getNodeSet(doc, "//ns:ptmprophet_result[@ptm='PTMProphet_STY79.966']/parent::analysis_result", namespaces = namespaces )
   ns="http://regis-web.systemsbiology.net/pepXML"
-  getNodeSet(doc, "//ns:ptmprophet_result[contains(@ptm,'PTMProphet_STY79.966')]/parent::*/following-sibling::analysis_result[@analysis='interprophet']", namespaces = namespaces )
+  
+  ################################
+  #####
+  ################################################this is the almost working
+  
+  
+  
+  getNodeSet(doc, "//ns:ptmprophet_result[contains(@ptm,'PTMProphet_STY79.966')]/parent::*/following-sibling::*", namespaces = namespaces )
   ns
   xmlName(doc, "//ns:ptmprophet_result[@ptm='PTMProphet_STY79.966']/parent::*")
   library(xml2)

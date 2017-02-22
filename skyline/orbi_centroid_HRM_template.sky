@@ -4,7 +4,7 @@
     <peptide_settings>
       <enzyme name="Trypsin" cut="KR" no_cut="P" sense="C" />
       <digest_settings max_missed_cleavages="5" />
-      <peptide_prediction use_measured_rts="true" measured_rt_window="2.5" use_spectral_library_drift_times="false" spectral_library_drift_times_peak_width_calc_type="resolving_power" spectral_library_drift_times_resolving_power="0" spectral_library_drift_times_width_at_dt_zero="0" spectral_library_drift_times_width_at_dt_max="0">
+      <peptide_prediction use_measured_rts="true" measured_rt_window="2" use_spectral_library_drift_times="false" spectral_library_drift_times_peak_width_calc_type="resolving_power" spectral_library_drift_times_resolving_power="0" spectral_library_drift_times_width_at_dt_zero="0" spectral_library_drift_times_width_at_dt_max="0">
         <predict_retention_time name="blankHRM" time_window="2.5">
           <irt_calculator name="blankHRM" database_path="C:\Users\jmeyer\Documents\GitHub\DIA-PIQE\skyline\blankHRM.irtdb" />
         </predict_retention_time>
@@ -42,7 +42,7 @@
       <transition_libraries ion_match_tolerance="0.055" ion_count="10" pick_from="all" />
       <transition_integration integrate_all="true" />
       <transition_instrument min_mz="50" max_mz="2000" mz_match_tolerance="0.055" />
-      <transition_full_scan acquisition_method="DIA" product_mass_analyzer="centroided" product_res="25" precursor_isotopes="Count" precursor_isotope_filter="3" precursor_mass_analyzer="centroided" precursor_res="15" retention_time_filter_type="scheduling_windows" retention_time_filter_length="2.5">
+      <transition_full_scan acquisition_method="DIA" product_mass_analyzer="centroided" product_res="25" precursor_isotopes="Count" precursor_isotope_filter="3" precursor_mass_analyzer="centroided" precursor_res="15" retention_time_filter_type="ms2_ids" retention_time_filter_length="2">
         <isotope_enrichments name="Default">
           <atom_percent_enrichment symbol="H'">0.98</atom_percent_enrichment>
           <atom_percent_enrichment symbol="C'">0.995</atom_percent_enrichment>
