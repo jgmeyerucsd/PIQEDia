@@ -164,7 +164,7 @@ get.labels=function(con="C:/urineALL/mapDIA.parameters"){
 
 #ptmProphName ="C:/urineALL/ptmProphet-output-file.ptm.pep.xml"
 prepMapDIAin=function(ptmProphName = "", 
-                            skyline.output= "C:/BAT/2016_0826_mapDIA_succinyl.csv", 
+                            skyline.output= "C:/BAT/2016_0826_mapDIA_both.csv", 
                             ptm.score=0.95,
                             modstring= "K100,K42",
                             wd="C:/BAT/",
@@ -177,7 +177,13 @@ prepMapDIAin=function(ptmProphName = "",
   #### alternately, this could be done as a connection instead of into memory
   print("reading skyline report")
   skyline.raw<-read.csv(skyline.output,stringsAsFactors = F,header = T)
-  modmass<-as.numeric(gsub("[A-Z]", "", modstring))
+  mods.split<-unlist(strsplit(modstring,split=","))
+  
+  for(x in mods.split){
+    print(x)
+  }
+  
+  modmasses<-as.numeric(gsub("[A-Z]", "", modstring))
   modmass4sky<-paste("+",round(modmass),collapse = "",sep="")
   modmass4reformat<-paste("[","+",round(modmass),"]",collapse = "",sep="")
   unique.peps<-unique(skyline.raw[,1])
@@ -234,7 +240,7 @@ prepMapDIAin=function(ptmProphName = "",
   
   #### check that modstring is appropriate
   ################
-  s.pos<-multimod.pos.protein(table=s,mass=modmass4reformat)
+  s.pos<-multimod.pos.protein(table=s,modmass=modstring)
   names(s.pos)[1] <- "site"
   s.unisite <- paste(s.pos[,"uniprot"], s.pos[,"site"], sep="_")  
   s.uni<-cbind(s.unisite,s.pos)
