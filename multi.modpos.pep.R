@@ -28,3 +28,4 @@ multi.modpos.pep=function(charseq="GK[+100]GK[+42]GQK[+42]R",modmasses="K:42,K:1
   #pep<-gsub("([)([0-9]+)(.)([0-9]+)(])", replacement="", charseq) 
 }
 
+

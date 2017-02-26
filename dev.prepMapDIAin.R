@@ -16,47 +16,37 @@ print(args)
 ####################################################################################
 
 
-mod.pos.protein=function(table=rawtable,mass="[+100]"){
-  
+multimod.pos.protein=function(table=skyline.raw,modmasses="K:42,K:100"){
   pep.start.pos<-table[,"Begin.Pos"]
-  #table<-table[pep.start.pos!="#N/A",]
-  #pep.start.pos<-pep.start.pos[pep.start.pos!="#N/A"]
-  
   protein.names<-table[,"uniprot"]
   pep.charseq<-as.character(table[,"Peptide.Modified.Sequence"])
   num.peps<-length(pep.start.pos)
-  pep.pos.list<-lapply(FUN=mod.position.pep, pep.charseq, modmass=mass)
-  prot.pos.list<-list()
+  pep.pos.list<-lapply(FUN=multi.modpos.pep, pep.charseq, modmass=modmasses)
   prot.pos.vec<-rep(0,times=num.peps)
-  
-  #### loop through the pep.pos.list
-  #### add those numbers to the number in pep.start.pos
-  #### put those numbers in named list
-  
-  #### make empty list with names of slots
+  modmasses<-gsub(":",modmasses,replace="+")
+  mods.vec<-unlist(strsplit(modmasses,split=","))
   for(i in 1:num.peps){
-    prot.pos.list[[as.character(protein.names[i])]]<-c()
-  }
-  
-  for(i in 1:num.peps){
-    prot.pos.list[[as.character(protein.names[i])]]<-c(prot.pos.list[[as.character(protein.names[i])]],as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]])
-    tempmods<-as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]]
-    if(length(tempmods)>1){
-      
-      prot.pos.vec[i]<-paste(tempmods,sep="_",collapse="_")
+    if(length(pep.pos.list[[i]])>1){
+      for(j in 1:nmods){
+        if(j==1){
+          prot.pos.vec[i]<-paste(as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]][[j]],names(pep.pos.list[[i]][j]),sep="")
+        }
+        if(j>1){
+          prot.pos.vec[i]<-paste(prot.pos.vec[i], paste(as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]][[j]],names(pep.pos.list[[i]][j]),sep=""),sep="_")
+        }
+      }
     }
-    if(length(tempmods)==1){
-      prot.pos.vec[i]<-tempmods
+    if(length(pep.pos.list[[i]])==1){
+      prot.pos.vec[i]<-paste(as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]][[1]],names(pep.pos.list[[i]][1]),sep=".")
     }
-    #prot.pos.vec[i]<-as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]]
   }
-  #names(prot.pos.list)->loopthrou
-  #for(x in loopthrou){
-  #	prot.pos.list[[x]]<-unique(prot.pos.list[[x]])
-  #	}
-  #rawtable[1:5,1:7]
-  newtable<-cbind(prot.pos.vec,table)
-  #newtable[1:5,1:10]
+  uniprot_modpos<-c(rep(0,times=length(prot.pos.vec)))
+  if(length(prot.pos.vec)>1){
+    for(i in 1:length(prot.pos.vec)){
+      uniprot_modpos[i]<-paste(table[i,"uniprot"],prot.pos.vec[i],sep="_",collapse="_")
+    }
+  }
+  newtable<-cbind(uniprot_modpos,table)
   return(newtable)
 }
 
@@ -67,9 +57,9 @@ mod.pos.protein=function(table=rawtable,mass="[+100]"){
 ####################################################################################
 
 
-mod.position.pep=function(charseq="GK[+42]GK[+42]GQK[+42]R",modmass="[+42]"){
-  regexpr(charseq,pat="(\\[)")
-  string.len<-nchar(charseq)
+multi.modpos.pep=function(charseq="GK[+100]GK[+42]GQK[+42]R",modmasses="K:42,K:100"){
+  mods.vec<-unlist(strsplit(modmasses,split=","))
+  mods.vec<-gsub(":",mods.vec,replacement = "+")
   modopenbracket<-gregexpr(charseq,pattern="(\\[)")[[1]]
   num.mods<-length(modopenbracket)
   modclosebracket<-gregexpr(charseq,pattern="(\\])")[[1]]
@@ -82,12 +72,16 @@ mod.position.pep=function(charseq="GK[+42]GK[+42]GQK[+42]R",modmass="[+42]"){
       mod.pos.pep[[i]]<-mod.pos.string[[i]]-mod.string.len[[i-1]]*(i-1)-1
     }
   }
-  modmasses<-list()
+  pep.modmasses<-list()
   for(i in 1:num.mods){
-    modmasses[[i]]<-substr(charseq,start=modopenbracket[i],stop=modclosebracket[i])
+    pep.modmasses[[i]]<-substr(charseq,start=modopenbracket[i],stop=modclosebracket[i])
   }
-  which(unlist(modmasses)==modmass)
-  return(unlist(mod.pos.pep[which(unlist(modmasses)==modmass)]))	
+  mod.list<-list()
+  for( x in mods.vec){
+    massnum<-gsub(x=x,"[A-Z][+]","")
+    mod.list[[x]]<-unlist(mod.pos.pep[grep(pep.modmasses,pattern=massnum)])
+  }
+  return(mod.list)	
   #pep<-gsub("([)([0-9]+)(.)([0-9]+)(])", replacement="", charseq) 
 }
 
@@ -182,6 +176,7 @@ prepMapDIAin=function(ptmProphName = "",
   for(x in mods.split){
     print(x)
   }
+  
   
   modmasses<-as.numeric(gsub("[A-Z]", "", modstring))
   modmass4sky<-paste("+",round(modmass),collapse = "",sep="")
