@@ -1,6 +1,7 @@
+#charseq<-s[7623,2]
+#skyline.filtered[2,2]
 
-
-multi.modpos.pep=function(charseq="GK[+100]GK[+42]GQK[+42]R",modmasses="K:42,K:100"){
+multi.modpos.pep=function(charseq="GK[+100]GK[+42]GQK[+42]R",modmasses="K42,K100"){
   mods.vec<-unlist(strsplit(modmasses,split=","))
   mods.vec<-gsub(":",mods.vec,replacement = "+")
   modopenbracket<-gregexpr(charseq,pattern="(\\[)")[[1]]
@@ -21,7 +22,8 @@ multi.modpos.pep=function(charseq="GK[+100]GK[+42]GQK[+42]R",modmasses="K:42,K:1
   }
   mod.list<-list()
   for( x in mods.vec){
-    massnum<-gsub(x=x,"[A-Z][+]","")
+    massnum<-gsub(x=x,"[A-Z]","")
+    
     mod.list[[x]]<-unlist(mod.pos.pep[grep(pep.modmasses,pattern=massnum)])
   }
   return(mod.list)	

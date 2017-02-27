@@ -172,24 +172,45 @@ prepMapDIAin=function(ptmProphName = "",
   print("reading skyline report")
   skyline.raw<-read.csv(skyline.output,stringsAsFactors = F,header = T)
   mods.split<-unlist(strsplit(modstring,split=","))
-  
+  head(skyline.raw)
   for(x in mods.split){
     print(x)
+    
   }
+  mods.split
+  
+  modmasses<-as.numeric(gsub("[A-Z]", "", mods.split))
+  rep("+", times=length(mods.split))
+  sapply(FUN=paste, rep("+", times=length(mods.split)), round(modmasses),collapse = "",sep="")
   
   
-  modmasses<-as.numeric(gsub("[A-Z]", "", modstring))
-  modmass4sky<-paste("+",round(modmass),collapse = "",sep="")
+  
+  #modmass4sky<-paste("+",round(modmasses),collapse = "",sep="")
   modmass4reformat<-paste("[","+",round(modmass),"]",collapse = "",sep="")
   unique.peps<-unique(skyline.raw[,1])
-  mod.peps.full<-unique.peps[grepl(unique.peps,pattern=modmass4sky)]
+  modmass4grep<-paste(modmasses,collapse="|",sep="|")
+  mod.peps.full<-unique.peps[grepl(unique.peps,pattern=modmass4grep)]
   mod.peps.cleaned<-gsub("(\\[)[-+][0-9]+(\\])","",mod.peps.full)
-  nmods<-sapply(regmatches(mod.peps.full, gregexpr(modmass4sky, mod.peps.full)), length)
+  nmods<-sapply(regmatches(mod.peps.full, gregexpr(modmass4grep, mod.peps.full)), length)
   skyline.mod.results.summary<-data.frame(mod.peps.full,mod.peps.cleaned,nmods)
   
-
+  
+  
+  
+  
+  
   
   if(nchar(ptmProphName)>7){    #### check if there was a real pep.xml file input
+    ####  format modstring for use
+    modmasses<-as.numeric(gsub("[A-Z]", "", modstring))
+    modmass4sky<-paste("+",round(modmass),collapse = "",sep="")
+    modmass4reformat<-paste("[","+",round(modmass),"]",collapse = "",sep="")
+    unique.peps<-unique(skyline.raw[,1])
+    mod.peps.full<-unique.peps[grepl(unique.peps,pattern=modmass4sky)]
+    mod.peps.cleaned<-gsub("(\\[)[-+][0-9]+(\\])","",mod.peps.full)
+    nmods<-sapply(regmatches(mod.peps.full, gregexpr(modmass4sky, mod.peps.full)), length)
+    skyline.mod.results.summary<-data.frame(mod.peps.full,mod.peps.cleaned,nmods)
+    
     ### check for xml package otherwise install
     if(library(XML,logical.return=T)==FALSE) install.packages("XML")
     if(library(XML, logical.return = T)==TRUE) require(XML)
@@ -230,23 +251,24 @@ prepMapDIAin=function(ptmProphName = "",
   proteins<-substr(start=4,stop=9,x=skyline.filtered[,"Protein"])
   s<-cbind(uniprot=proteins,skyline.filtered)
   
-  
+  head(s)
   
   
   #### check that modstring is appropriate
   ################
   s.pos<-multimod.pos.protein(table=s,modmass=modstring)
-  names(s.pos)[1] <- "site"
-  s.unisite <- paste(s.pos[,"uniprot"], s.pos[,"site"], sep="_")  
-  s.uni<-cbind(s.unisite,s.pos)
-  names(s.uni)[1] <- "uniprot_site"
-  area.columns<-grep("Area",names(s.uni))
-  RTcol<-grep("Average.Measured.Retention.Time",names(s.uni))
-  m.temp1<-s.uni[,c("uniprot_site","Peptide.Modified.Sequence","Product.Mz")]
-  tmp<-cbind(m.temp1,s.uni[,area.columns])
+  head(s.pos)
+  names(s.pos)[1] <- "uniprot_site"
+  #s.unisite <- paste(s.pos[,"uniprot"], s.pos[,"site"], sep="_")  
+  #s.uni<-cbind(s.unisite,s.pos)
+  #names(s.uni)[1] <- "uniprot_site"
+  area.columns<-grep("Area",names(s.pos))
+  RTcol<-grep("Average.Measured.Retention.Time",names(s.pos))
+  m.temp1<-s.pos[,c("uniprot_site","Peptide.Modified.Sequence","Product.Mz")]
+  tmp<-cbind(m.temp1,s.pos[,area.columns])
   #m.temp2<-s.uni[,c(area.columns,RTcol)]
-  mapDIAinput<-cbind(tmp,s.uni[,RTcol])
-  names(mapDIAinput)[length(names(mapDIAinput))]<-"RT"
+  mapDIAinput<-cbind(tmp,s.pos[,RTcol])
+  #names(mapDIAinput)[length(names(mapDIAinput))]<-"RT"
   #head(mapDIAinput)
   #write.csv(skyline.mod.results.summary,file="C:/skylineModResultsSummary.csv",row.names = F, quote=F)
   #### write the output file
@@ -257,12 +279,12 @@ prepMapDIAin=function(ptmProphName = "",
   #write.csv(data.frame(pep.cleaned=cleaned,is.localized=ptms.localized),file="C:/testRoutput.csv",row.names = F, quote=F)
   mapDIAinput[mapDIAinput=="#N/A"]<-"NA"
   names(mapDIAinput)[length(names(mapDIAinput))]<-"RT"
-  
+  head(mapDIAinput)
 
   #### with protein level correction
   if(protlvl.correction==TRUE){
     print("correcting protein levels")
-    mapDIAinput<-protlvlcorrection(sitelevels=mapDIAinput, proteinlevels="proteinlevel.txt",dir=wd)
+    mapDIAinput<-protlvlcorrection(sitelevels=mapDIAinput, proteinlevels="proteinlevels.txt",dir=wd)
   }
   
   ##### finally, assign name mapping table if provided
