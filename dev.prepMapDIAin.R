@@ -23,27 +23,40 @@ multimod.pos.protein=function(table=skyline.raw,modmasses="K:42,K:100"){
   num.peps<-length(pep.start.pos)
   pep.pos.list<-lapply(FUN=multi.modpos.pep, pep.charseq, modmass=modmasses)
   prot.pos.vec<-rep(0,times=num.peps)
+  
+  #modresidues<-gsub("([0-9])",modmasses,"")
+  modmasses<-gsub(":",modmasses,replace="+")
+  
+  mods.vec<-unlist(strsplit(modmasses,split=","))
+  
+  prot.pos.list<- vector("list",num.peps)
   modmasses<-gsub(":",modmasses,replace="+")
   mods.vec<-unlist(strsplit(modmasses,split=","))
+  nmods<-length(mods.vec)
+  print("assigning protein positions")
+  
   for(i in 1:num.peps){
     if(length(pep.pos.list[[i]])>1){
       for(j in 1:nmods){
         if(j==1){
-          prot.pos.vec[i]<-paste(as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]][[j]],names(pep.pos.list[[i]][j]),sep="")
+          prot.pos.list[[i]]<-paste(as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]][[j]],names(pep.pos.list[[i]][j]),sep="")
         }
         if(j>1){
-          prot.pos.vec[i]<-paste(prot.pos.vec[i], paste(as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]][[j]],names(pep.pos.list[[i]][j]),sep=""),sep="_")
+          prot.pos.list[[i]]<-paste(prot.pos.vec[i], paste(as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]][[j]],names(pep.pos.list[[i]][j]),sep=""),sep="_")
         }
       }
     }
     if(length(pep.pos.list[[i]])==1){
-      prot.pos.vec[i]<-paste(as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]][[1]],names(pep.pos.list[[i]][1]),sep=".")
+      prot.pos.list[[i]]<-paste(as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]][[1]],names(pep.pos.list[[i]][1]),sep=".")
     }
   }
   uniprot_modpos<-c(rep(0,times=length(prot.pos.vec)))
+  
+  print("finishing protein_mods column")
   if(length(prot.pos.vec)>1){
     for(i in 1:length(prot.pos.vec)){
-      uniprot_modpos[i]<-paste(table[i,"uniprot"],prot.pos.vec[i],sep="_",collapse="_")
+      print(i)
+      uniprot_modpos[i]<-paste(table[i,"uniprot"],prot.pos.list[[i]],sep="_",collapse="_")
     }
   }
   newtable<-cbind(uniprot_modpos,table)
@@ -57,9 +70,13 @@ multimod.pos.protein=function(table=skyline.raw,modmasses="K:42,K:100"){
 ####################################################################################
 
 
-multi.modpos.pep=function(charseq="GK[+100]GK[+42]GQK[+42]R",modmasses="K:42,K:100"){
+
+multi.modpos.pep=function(charseq="GK[+80]GK[+42]GQK[+42]R",modmasses="K:42,K:100,STY:79.966"){
+  
+  
   mods.vec<-unlist(strsplit(modmasses,split=","))
   mods.vec<-gsub(":",mods.vec,replacement = "+")
+  
   modopenbracket<-gregexpr(charseq,pattern="(\\[)")[[1]]
   num.mods<-length(modopenbracket)
   modclosebracket<-gregexpr(charseq,pattern="(\\])")[[1]]
@@ -78,12 +95,13 @@ multi.modpos.pep=function(charseq="GK[+100]GK[+42]GQK[+42]R",modmasses="K:42,K:1
   }
   mod.list<-list()
   for( x in mods.vec){
-    massnum<-gsub(x=x,"[A-Z][+]","")
+    massnum<-as.character(round(as.numeric(gsub(x=x,"[A-Z]*[+]","")),digits=0))
     mod.list[[x]]<-unlist(mod.pos.pep[grep(pep.modmasses,pattern=massnum)])
   }
   return(mod.list)	
   #pep<-gsub("([)([0-9]+)(.)([0-9]+)(])", replacement="", charseq) 
 }
+
 
 ##################################################################################################################
 ############### helper function #3
@@ -157,12 +175,12 @@ get.labels=function(con="C:/urineALL/mapDIA.parameters"){
 ####################################################################################
 
 #ptmProphName ="C:/urineALL/ptmProphet-output-file.ptm.pep.xml"
-prepMapDIAin=function(ptmProphName = "", 
-                            skyline.output= "C:/BAT/2016_0826_mapDIA_both.csv", 
+prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep.xml", 
+                            skyline.output= "C:/urineALL/2016_0826_mapDIA.csv", 
                             ptm.score=0.95,
-                            modstring= "K100,K42",
-                            wd="C:/BAT/",
-                            namemapping=nm,
+                            modstring= "STY79.966",
+                            wd="C:/urineALL/",
+                            namemapping=TRUE,
                             protlvl.correction=TRUE)
   {
   setwd(wd)
@@ -179,8 +197,8 @@ prepMapDIAin=function(ptmProphName = "",
   
   
   modmasses<-as.numeric(gsub("[A-Z]", "", modstring))
-  modmass4sky<-paste("+",round(modmass),collapse = "",sep="")
-  modmass4reformat<-paste("[","+",round(modmass),"]",collapse = "",sep="")
+  modmass4sky<-paste("+",round(modmasses),collapse = "",sep="")
+  modmass4reformat<-paste("[","+",round(modmasses),"]",collapse = "",sep="")
   unique.peps<-unique(skyline.raw[,1])
   mod.peps.full<-unique.peps[grepl(unique.peps,pattern=modmass4sky)]
   mod.peps.cleaned<-gsub("(\\[)[-+][0-9]+(\\])","",mod.peps.full)
@@ -231,7 +249,7 @@ prepMapDIAin=function(ptmProphName = "",
   s<-cbind(uniprot=proteins,skyline.filtered)
   
   
-  
+  modstring<-"STY:80"
   
   #### check that modstring is appropriate
   ################

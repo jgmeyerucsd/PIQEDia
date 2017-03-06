@@ -16,47 +16,54 @@ print(args)
 ####################################################################################
 
 
-mod.pos.protein=function(table=rawtable,mass="[+100]"){
-  
+multimod.pos.protein=function(table=skyline.raw,modmasses="K:42,K:100"){
   pep.start.pos<-table[,"Begin.Pos"]
-  #table<-table[pep.start.pos!="#N/A",]
-  #pep.start.pos<-pep.start.pos[pep.start.pos!="#N/A"]
-  
   protein.names<-table[,"uniprot"]
   pep.charseq<-as.character(table[,"Peptide.Modified.Sequence"])
   num.peps<-length(pep.start.pos)
-  pep.pos.list<-lapply(FUN=mod.position.pep, pep.charseq, modmass=mass)
-  prot.pos.list<-list()
+  
+  
+  pep.pos.list<-lapply(FUN=multi.modpos.pep, pep.charseq, modmass=modmasses)
+  
+  #### need to fix this to work with various numbers of residues
   prot.pos.vec<-rep(0,times=num.peps)
   
-  #### loop through the pep.pos.list
-  #### add those numbers to the number in pep.start.pos
-  #### put those numbers in named list
+  #modresidues<-gsub("([0-9])",modmasses,"")
+  modmasses<-gsub(":",modmasses,replace="+")
   
-  #### make empty list with names of slots
-  for(i in 1:num.peps){
-    prot.pos.list[[as.character(protein.names[i])]]<-c()
-  }
+  mods.vec<-unlist(strsplit(modmasses,split=","))
+  
+  prot.pos.list<- vector("list",num.peps)
+  modmasses<-gsub(":",modmasses,replace="+")
+  mods.vec<-unlist(strsplit(modmasses,split=","))
+  nmods<-length(mods.vec)
+  print("assigning protein positions")
   
   for(i in 1:num.peps){
-    prot.pos.list[[as.character(protein.names[i])]]<-c(prot.pos.list[[as.character(protein.names[i])]],as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]])
-    tempmods<-as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]]
-    if(length(tempmods)>1){
-      
-      prot.pos.vec[i]<-paste(tempmods,sep="_",collapse="_")
+    if(length(pep.pos.list[[i]])>1){
+      for(j in 1:nmods){
+        if(j==1){
+          prot.pos.list[[i]]<-paste(as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]][[j]],names(pep.pos.list[[i]][j]),sep="")
+        }
+        if(j>1){
+          prot.pos.list[[i]]<-paste(prot.pos.vec[i], paste(as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]][[j]],names(pep.pos.list[[i]][j]),sep=""),sep="_")
+        }
+      }
     }
-    if(length(tempmods)==1){
-      prot.pos.vec[i]<-tempmods
+    if(length(pep.pos.list[[i]])==1){
+      prot.pos.list[[i]]<-paste(as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]][[1]],names(pep.pos.list[[i]][1]),sep=".")
     }
-    #prot.pos.vec[i]<-as.numeric(as.character(pep.start.pos[i]))+pep.pos.list[[i]]
   }
-  #names(prot.pos.list)->loopthrou
-  #for(x in loopthrou){
-  #	prot.pos.list[[x]]<-unique(prot.pos.list[[x]])
-  #	}
-  #rawtable[1:5,1:7]
-  newtable<-cbind(prot.pos.vec,table)
-  #newtable[1:5,1:10]
+  uniprot_modpos<-c(rep(0,times=length(prot.pos.vec)))
+  
+  print("finishing protein_mods column")
+  if(length(prot.pos.vec)>1){
+    for(i in 1:length(prot.pos.vec)){
+      #print(i)
+      uniprot_modpos[i]<-paste(table[i,"uniprot"],prot.pos.list[[i]],sep="_",collapse="_")
+    }
+  }
+  newtable<-cbind(uniprot_modpos,table)
   return(newtable)
 }
 
@@ -67,9 +74,15 @@ mod.pos.protein=function(table=rawtable,mass="[+100]"){
 ####################################################################################
 
 
-mod.position.pep=function(charseq="GK[+42]GK[+42]GQK[+42]R",modmass="[+42]"){
-  regexpr(charseq,pat="(\\[)")
-  string.len<-nchar(charseq)
+
+multi.modpos.pep=function(charseq="GK[+80]GK[+42]GQK[+42]R",modmasses="K:42,K:100,STY:79.966"){
+  
+  
+  mods.vec<-unlist(strsplit(modmasses,split=","))
+  mods.vec<-gsub(":",mods.vec,replacement = "+")
+  
+  #mods.mass.vec<-gsub("[A-Z]",mods.vec,replacement = "")
+  
   modopenbracket<-gregexpr(charseq,pattern="(\\[)")[[1]]
   num.mods<-length(modopenbracket)
   modclosebracket<-gregexpr(charseq,pattern="(\\])")[[1]]
@@ -82,20 +95,26 @@ mod.position.pep=function(charseq="GK[+42]GK[+42]GQK[+42]R",modmass="[+42]"){
       mod.pos.pep[[i]]<-mod.pos.string[[i]]-mod.string.len[[i-1]]*(i-1)-1
     }
   }
-  modmasses<-list()
+  pep.modmasses<-list()
   for(i in 1:num.mods){
-    modmasses[[i]]<-substr(charseq,start=modopenbracket[i],stop=modclosebracket[i])
+    pep.modmasses[[i]]<-substr(charseq,start=modopenbracket[i],stop=modclosebracket[i])
   }
-  which(unlist(modmasses)==modmass)
-  return(unlist(mod.pos.pep[which(unlist(modmasses)==modmass)]))	
+  mod.list<-list()
+  
+  for( x in mods.vec){
+    massnum<-as.character(round(as.numeric(gsub(x=x,"[A-Z]*[+]","")),digits=0))
+    mod.list[[x]]<-unlist(mod.pos.pep[grep(pep.modmasses,pattern=massnum)])
+  }
+  return(mod.list)	
   #pep<-gsub("([)([0-9]+)(.)([0-9]+)(])", replacement="", charseq) 
 }
+
 
 ##################################################################################################################
 ############### helper function #3
 #############################################
 ####################################################################################
-
+#### works even if sitelevel has a column not found in proteinlevels.txt and removes it
 
 protlvlcorrection = function(sitelevels=mapDIAinput, proteinlevels="proteinlevels.txt",params="C:/urineALL/mapDIA.params",dir="C:/urineALL/"){
   #head(mapDIAinput)
@@ -115,7 +134,9 @@ protlvlcorrection = function(sitelevels=mapDIAinput, proteinlevels="proteinlevel
   sl.colnames<-names(sl)
   sl.areacols<-grep("Area",sl.colnames)
   pos.in.pl<-match(sl.colnames[sl.areacols],pl.colnames)
-  pl<-pl[,c(1,pos.in.pl)]
+  ### check if a column is missing in protlevel and omit
+  sl<-subset(sl,select=-sl.areacols[is.na(pos.in.pl)==TRUE])
+  pl<-pl[,c(1,na.omit(pos.in.pl))]
   ### add 1 to each value to ensure no /0
   pl[,2:ncol(pl)]<-pl[,2:ncol(pl)]+1
   
@@ -163,12 +184,12 @@ get.labels=function(con="C:/urineALL/mapDIA.parameters"){
 ####################################################################################
 
 #ptmProphName ="C:/urineALL/ptmProphet-output-file.ptm.pep.xml"
-prepMapDIAin=function(ptmProphName = "", 
-                            skyline.output= "C:/BAT/2016_0826_mapDIA_succinyl.csv", 
+prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep.xml", 
+                            skyline.output= "C:/urineALL/2016_0826_mapDIA.csv", 
                             ptm.score=0.95,
-                            modstring= "K100.0",
-                            wd="C:/BAT/",
-                            namemapping=nm,
+                            modstring= "STY:79.966",
+                            wd="C:/urineALL/",
+                            namemapping=FALSE,
                             protlvl.correction=TRUE)
   {
   setwd(wd)
@@ -177,9 +198,12 @@ prepMapDIAin=function(ptmProphName = "",
   #### alternately, this could be done as a connection instead of into memory
   print("reading skyline report")
   skyline.raw<-read.csv(skyline.output,stringsAsFactors = F,header = T)
-  modmass<-as.numeric(gsub("[A-Z]", "", modstring))
-  modmass4sky<-paste("+",round(modmass),collapse = "",sep="")
-  modmass4reformat<-paste("[","+",round(modmass),"]",collapse = "",sep="")
+  mods.split<-unlist(strsplit(modstring,split=","))
+  
+  modmasses<-gsub(":", mods.split,replacement = "")
+  modmasses<-as.numeric(gsub("[A-Z]", modmasses, replacement=""))
+  modmass4sky<-paste("+",round(modmasses),collapse = "",sep="")
+  modmass4reformat<-paste("[","+",round(modmasses),"]",collapse = "",sep="")
   unique.peps<-unique(skyline.raw[,1])
   mod.peps.full<-unique.peps[grepl(unique.peps,pattern=modmass4sky)]
   mod.peps.cleaned<-gsub("(\\[)[-+][0-9]+(\\])","",mod.peps.full)
@@ -229,7 +253,12 @@ prepMapDIAin=function(ptmProphName = "",
   proteins<-substr(start=4,stop=9,x=skyline.filtered[,"Protein"])
   s<-cbind(uniprot=proteins,skyline.filtered)
   
-  s.pos<-mod.pos.protein(table=s,mass=modmass4reformat)
+  
+  #modstring<-"STY:80"
+  
+  #### check that modstring is appropriate
+  ################
+  s.pos<-multimod.pos.protein(table=s,modmasses=modstring)
   names(s.pos)[1] <- "site"
   s.unisite <- paste(s.pos[,"uniprot"], s.pos[,"site"], sep="_")  
   s.uni<-cbind(s.unisite,s.pos)
@@ -241,14 +270,7 @@ prepMapDIAin=function(ptmProphName = "",
   #m.temp2<-s.uni[,c(area.columns,RTcol)]
   mapDIAinput<-cbind(tmp,s.uni[,RTcol])
   names(mapDIAinput)[length(names(mapDIAinput))]<-"RT"
-  #head(mapDIAinput)
-  #write.csv(skyline.mod.results.summary,file="C:/skylineModResultsSummary.csv",row.names = F, quote=F)
-  #### write the output file
-  #### currently this just tests that it can be written need to re-format
-  #colnames(cleaned)<-"peptide.sequence"
-  #data.frame(peptides=cleaned,is.localized=ptms.localized)
-  
-  #write.csv(data.frame(pep.cleaned=cleaned,is.localized=ptms.localized),file="C:/testRoutput.csv",row.names = F, quote=F)
+
   mapDIAinput[mapDIAinput=="#N/A"]<-"NA"
   names(mapDIAinput)[length(names(mapDIAinput))]<-"RT"
   
@@ -256,7 +278,7 @@ prepMapDIAin=function(ptmProphName = "",
   #### with protein level correction
   if(protlvl.correction==TRUE){
     print("correcting protein levels")
-    mapDIAinput<-protlvlcorrection(sitelevels=mapDIAinput, proteinlevels="proteinlevel.txt",dir=wd)
+    mapDIAinput<-protlvlcorrection(sitelevels=mapDIAinput, proteinlevels="proteinlevels.txt",dir=wd)
   }
   
   ##### finally, assign name mapping table if provided
@@ -280,20 +302,36 @@ prepMapDIAin=function(ptmProphName = "",
     }
   }
   
-
+  
+  print(paste(wd,"mapDIA.parameters",collapse="",sep=""))
+  
+  if(substr(wd,start=nchar(wd),stop=nchar(wd))!="/"){
+    print("directory needs to end in /, attempting to fix")
+    wd<-paste(wd,"/",sep="",collapse="")
+    
+  }
+  
   groups<-get.labels(con=paste(wd,"mapDIA.parameters",collapse="",sep=""))
-  head(mapDIAinput)
+  
   tmp<-mapDIAinput[,1:3]
+  group.n<-list()
   for(i in 1:length(groups)){
     print(i)
-     tmp<-cbind(tmp,mapDIAinput[,grep(paste(groups[i],"",sep="."),names(mapDIAinput),fixed=T,value=T)])
+    tmp<-cbind(tmp,mapDIAinput[,grep(paste(groups[i],"",sep="."),names(mapDIAinput),fixed=T,value=T)])
+    group.n[[paste(groups[i])]]<-length(mapDIAinput[,grep(paste(groups[i],"",sep="."),names(mapDIAinput),fixed=T,value=T)])
   }
-  head(tmp)
+
   tmp<-cbind(tmp,"RT"=mapDIAinput[,"RT"])
+  
+  
+  #### update the condition numbering in mapDIA.parameters
+  mp.lines<-readLines(paste(wd,"mapDIA.parameters",collapse="",sep=""))
+  mp.lines[grep("SIZE=",mp.lines)]<-paste(c("SIZE=",unlist(group.n)),sep=" ",collapse=" ")
+  writeLines(mp.lines, con="mapDIA.parameters")
   
   finalout<-tmp
   #### without protein level correction
-
+  head(finalout)
   print("writing mapDIA input file")
   fileout<-paste(wd,"mapDIA_Input.txt",sep="",collapse = "")
   write.table(file=fileout, finalout,row.names = F,quote=F,sep="\t")
@@ -328,7 +366,7 @@ if(length(protlvlfile)==1){
 if(length(args)<5) print("missing arguments to command line")
 if(length(args)==5){
   print("starting R...")
-  prepMapDIAin(ptmProphName=args[1],skyline.output=args[2],ptm.score = args[3],modstring= args[4], wd=args[5],protlvl.correction = correct)
+  prepMapDIAin(ptmProphName=args[1],skyline.output=args[2],ptm.score = args[3],modstring= args[4], wd=args[5],namemapping = nm, protlvl.correction = correct)
 }
 
 

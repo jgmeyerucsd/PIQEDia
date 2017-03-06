@@ -22,21 +22,21 @@ C:\
 C:\
 C:\
 C:\
-C:\Inetpub\tpp-bin\xinteract.exe
-C:\Inetpub\tpp-bin\InterProphetParser.exe
-C:\SkylineRunner35.exe
-2016_0826_mapDIA
-C:\Users\jmeyer\Documents\GitHub\DIA-Pipe-orbi\inputs\20161213.human.fasta
-C:\urineALL\orbi_centroid_HRM_template.sky
-default
-C:\Inetpub\tpp-bin\PTMProphetParser.exe
-STY:79.9663:-97.9769:-115.988,M:15.9949:-63.998286:-81.0248:-82.0885
-0.055
-0.75
+C:\
+C:\
+C:\
+AReportName
+C:\
+C:\
+C:\
+C:\
+K,#,M,#,nQ,#
+###
+###
 pain UTI OC
 
 C:\urineALL\
-STY79.966
+STY:79.966
 0.95
 C:\urineALL\2016_0826_mapDIA.csv
 C:\urineALL\ptmProphet-output-file.ptm.pep.xml
@@ -44,7 +44,7 @@ false
 false
 false
 false
-true
-true
-true
+false
+false
+false
 true
