@@ -31,6 +31,7 @@ public class CreateWiffToMzxml {
 		String mParallelPath = args[1]+"\\mParallel\\MParallel.exe";
 		String MSConvertExePath = args[2];
 		int numOfFiles = 0;
+		String cores = args[3];
 		
 		for( File file : files ) {
 			if( !file.isDirectory() && ( file.getAbsolutePath().endsWith(".wiff") ) && ( !file.getAbsolutePath().endsWith(".wiff.scan") ) ) {
