@@ -1,6 +1,6 @@
 Keep this line
-C:\urineALL
-C:\urineALL
+C:\Users
+C:\Users
 56
 128
 C:\
@@ -33,13 +33,13 @@ C:\
 K,#,M,#,nQ,#
 ###
 ###
-pain UTI OC
-
-C:\urineALL\
-STY:79.966
-0.95
-C:\urineALL\2016_0826_mapDIA.csv
-C:\urineALL\ptmProphet-output-file.ptm.pep.xml
+mapDIALabels
+C:\
+C:\
+C:\
+C:\
+empty
+C:\
 false
 false
 false
@@ -47,4 +47,4 @@ false
 false
 false
 false
-true
+false

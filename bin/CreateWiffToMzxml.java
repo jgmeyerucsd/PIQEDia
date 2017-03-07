@@ -11,10 +11,11 @@ import java.io.FileWriter;
 import java.util.Scanner;
 import java.lang.Integer;
 
-public class CreateWiffToMzml {
+public class CreateWiffToMzxml {
 	
 	static StringBuffer WiffMzmlBatFile = new StringBuffer();
 	static StringBuffer WiffMzmlBatFileMain = new StringBuffer();
+	
 	
 	public static void main( String [] args ) {
    
@@ -28,7 +29,7 @@ public class CreateWiffToMzml {
 		File outputDir = new File(args[0]);
 		File[] files = outputDir.listFiles();
 		String mParallelPath = args[1]+"\\mParallel\\MParallel.exe";
-		String ABSCIEXMSConvertExePath = args[2];
+		String MSConvertExePath = args[2];
 		int numOfFiles = 0;
 		
 		for( File file : files ) {
@@ -38,9 +39,8 @@ public class CreateWiffToMzml {
 				WiffMzmlBatFile.append("--mzXML").append(" ");
 				WiffMzmlBatFile.append("--filter \"peakPicking vendor msLevel=1-\"").append(" ");
 				WiffMzmlBatFile.append("--32").append(" ");
-				WiffMzmlBatFile.append("--zlib").append(" ");
 				WiffMzmlBatFile.append("--outfile").append(" ");
-				WiffMzmlBatFile.append(file.getAbsolutePath().replace(".mzml", ".mzXML"));
+				WiffMzmlBatFile.append(file.getAbsolutePath().replace(".wiff", ".mzXML"));
 				WiffMzmlBatFile.append(" : ");
 				numOfFiles++;
 			}
@@ -49,7 +49,9 @@ public class CreateWiffToMzml {
 		
 		if(numOfFiles != 0) {
 			WiffMzmlBatFileMain.append(mParallelPath).append(" ");
-			WiffMzmlBatFileMain.append("--count=" + numOfFiles + " ");
+			WiffMzmlBatFileMain.append("--count=" + cores + " ");
+			WiffMzmlBatFileMain.append("--logfile=mparallel.log ");
+			WiffMzmlBatFileMain.append("--priority=4 ");
 			WiffMzmlBatFileMain.append("--shell ");
 			WiffMzmlBatFileMain.append(WiffMzmlBatFile);
 			WiffMzmlBatFileMain.delete(WiffMzmlBatFileMain.length()-3, WiffMzmlBatFileMain.length());
@@ -61,7 +63,7 @@ public class CreateWiffToMzml {
 	}
 	
 	private static void writeToFile( File outputDir ) {
-		String MSGFBatFilePath = outputDir.toString() + "\\WiffToMzml.bat";
+		String MSGFBatFilePath = outputDir.toString() + "\\WiffToMzxml.bat";
 		try {
 			BufferedWriter bufwriter = new BufferedWriter( new FileWriter(MSGFBatFilePath) );
 			bufwriter.write(WiffMzmlBatFileMain.toString());

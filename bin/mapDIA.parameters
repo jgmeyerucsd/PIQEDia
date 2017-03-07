@@ -6,8 +6,8 @@ FILE =C:\urineALL\mapDIA_Input.txt
 EXPERIMENTAL_DESIGN= IndependentDesign
 
 
-### Normalization = NONE
-NORMALIZATION = NONE
+### Normalization = RT 5 2
+NORMALIZATION = RT 5 2
 
 
 ### Filter

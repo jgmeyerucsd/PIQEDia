@@ -379,40 +379,38 @@ IF "%RunDiaUmpirePipe%"=="true" (
 	time /T
 	echo|set /p=looking for .wiff files
 	IF exist *.wiff (
-		echo -------------------------------
-		echo:
-		echo|set /p=Converting .wiff files to .mzml  -  
-		time /T
-		echo -------------------------------
-		echo:
-		cd %CurrentDir%
-		IF "%CompileJava%"=="yes" javac CreateWiffToMzml.java
-		java CreateWiffToMzml %OutputDir% %CurrentDir% "%ABSCIEXMSConvertExe%"
-		IF "%CompileJava%"=="yes" rm CreateWiffToMzml.class
-		cd %OutputDir%
-		call WiffToMzml.bat
-		cd %CurrentDir%
+		IF exist *.mzXML (
+			echo|set /p=using .mzXML files present in dir
+			echo:
+			echo ----------------------------------
+			echo:
+			echo|set /p= to re-convert delete .mzXML files
+			echo:
+			echo ----------------------------------
+			echo:
+		) ELSE (
+			echo -------------------------------
+			echo:
+			echo|set /p=Converting .wiff files to .mzXML  -  
+			time /T
+			echo --------------------------------
+			echo:
+			IF "%CompileJava%"=="yes" javac CreateWiffToMzxml.java
+			java CreateWiffToMzxml %OutputDir% %CurrentDir% "%MSConvertExe%" %NumOfThreads%
+			IF "%CompileJava%"=="yes" rm CreateWiffToMzxml.class
+			cd %OutputDir%
+			call WiffToMzxml.bat
+			cd %CurrentDir%
 
-		echo|set /p=Converting .mzml files to .mzXML  -  
-		time /T
-		echo --------------------------------
-		echo:
-		IF "%CompileJava%"=="yes" javac CreateMzmlToMzxml.java
-		java CreateMzmlToMzxml %OutputDir% %CurrentDir% "%MSConvertExe%"
-		IF "%CompileJava%"=="yes" rm CreateMzmlToMzxml.class
-		cd %OutputDir%
-		call MzmlToMzxml.bat
-		cd %CurrentDir%
-
-		echo|set /p=.wiff file conversions completed.  -  
-		time /T
-		echo ----------------------------------
-		echo:
-	) ELSE (
-		echo:
-		echo|set /p=no .wiff files found
-		echo:
-	)
+			echo|set /p=.wiff file conversions completed.  -  
+			time /T
+			echo ----------------------------------
+			echo:
+		) ELSE (
+			echo:
+			echo|set /p=no .wiff files found
+			echo:
+		)
 	echo|set /p=looking for .raw files
 	echo:
 	echo ---------------------------------------
