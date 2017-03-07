@@ -395,6 +395,7 @@ IF "%RunDiaUmpirePipe%"=="true" (
 			time /T
 			echo --------------------------------
 			echo:
+			cd %CurrentDir%
 			IF "%CompileJava%"=="yes" javac CreateWiffToMzxml.java
 			java CreateWiffToMzxml %OutputDir% %CurrentDir% "%MSConvertExe%" %NumOfThreads%
 			IF "%CompileJava%"=="yes" rm CreateWiffToMzxml.class
@@ -406,11 +407,8 @@ IF "%RunDiaUmpirePipe%"=="true" (
 			time /T
 			echo ----------------------------------
 			echo:
-		) ELSE (
-			echo:
-			echo|set /p=no .wiff files found
-			echo:
-		)
+		)  
+	)	
 	echo|set /p=looking for .raw files
 	echo:
 	echo ---------------------------------------

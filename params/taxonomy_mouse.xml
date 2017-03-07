@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<bioml label="x! taxon-to-file matching list">
+  <taxon label="mydatabase">
+    <file format="peptide" URL="C:/Users/jmeyer/Documents/GitHub/DIA-PIQE/inputs/20150810.mouse.cc.iRT_DECOY.fasta" />
+  </taxon>
+</bioml>
