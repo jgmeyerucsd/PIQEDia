@@ -135,7 +135,9 @@ protlvlcorrection = function(sitelevels=mapDIAinput, proteinlevels="proteinlevel
   sl.areacols<-grep("Area",sl.colnames)
   pos.in.pl<-match(sl.colnames[sl.areacols],pl.colnames)
   ### check if a column is missing in protlevel and omit
-  sl<-subset(sl,select=-sl.areacols[is.na(pos.in.pl)==TRUE])
+  if(length(sl.areacols)!=length(pos.in.pl)){
+    sl<-subset(sl,select=-sl.areacols[is.na(pos.in.pl)==TRUE])
+  }
   pl<-pl[,c(1,na.omit(pos.in.pl))]
   ### add 1 to each value to ensure no /0
   pl[,2:ncol(pl)]<-pl[,2:ncol(pl)]+1
@@ -154,7 +156,7 @@ protlvlcorrection = function(sitelevels=mapDIAinput, proteinlevels="proteinlevel
   m.tot <- as.matrix(merged[,grep(" total", names(merged))])
   m.tot  <-apply(m.tot , 2, as.numeric)
   normalized <- m.mod/m.tot
-  head(normalized)
+  #head(normalized)
   rn<-merged[,c("uniprot_site", "Peptide.Modified.Sequence", "Product.Mz")]
   normalized.final <- cbind(rn, normalized,RT=merged[,"RT"])
   head(normalized.final)
@@ -186,7 +188,7 @@ get.labels=function(con="C:/urineALL/mapDIA.parameters"){
 #ptmProphName ="C:/urineALL/ptmProphet-output-file.ptm.pep.xml"
 prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep.xml", 
                             skyline.output= "C:/urineALL/2016_0826_mapDIA.csv", 
-                            ptm.score=0.95,
+                            ptm.score=0.99,
                             modstring= "STY:79.966",
                             wd="C:/urineALL/",
                             namemapping=FALSE,
@@ -255,25 +257,25 @@ prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep
   
   
   #modstring<-"STY:80"
-  
+  head(s)
   #### check that modstring is appropriate
   ################
   s.pos<-multimod.pos.protein(table=s,modmasses=modstring)
-  names(s.pos)[1] <- "site"
-  s.unisite <- paste(s.pos[,"uniprot"], s.pos[,"site"], sep="_")  
-  s.uni<-cbind(s.unisite,s.pos)
-  names(s.uni)[1] <- "uniprot_site"
-  area.columns<-grep("Area",names(s.uni))
-  RTcol<-grep("Average.Measured.Retention.Time",names(s.uni))
-  m.temp1<-s.uni[,c("uniprot_site","Peptide.Modified.Sequence","Product.Mz")]
-  tmp<-cbind(m.temp1,s.uni[,area.columns])
+  #names(s.pos)[1] <- "site"
+  #s.unisite <- paste(s.pos[,"uniprot"], s.pos[,"site"], sep="_")  
+  #s.uni<-cbind(s.unisite,s.pos)
+  names(s.pos)[1] <- "uniprot_site"
+  area.columns<-grep("Area",names(s.pos))
+  RTcol<-grep("Average.Measured.Retention.Time",names(s.pos))
+  m.temp1<-s.pos[,c("uniprot_site","Peptide.Modified.Sequence","Product.Mz")]
+  tmp<-cbind(m.temp1,s.pos[,area.columns])
   #m.temp2<-s.uni[,c(area.columns,RTcol)]
-  mapDIAinput<-cbind(tmp,s.uni[,RTcol])
+  mapDIAinput<-cbind(tmp,s.pos[,RTcol])
   names(mapDIAinput)[length(names(mapDIAinput))]<-"RT"
 
   mapDIAinput[mapDIAinput=="#N/A"]<-"NA"
   names(mapDIAinput)[length(names(mapDIAinput))]<-"RT"
-  
+  head(mapDIAinput)
 
   #### with protein level correction
   if(protlvl.correction==TRUE){
@@ -311,14 +313,18 @@ prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep
     
   }
   
+  #### NEED FIX: this part requires that mapDIA.parameters is present in the directory
+  #### also requires that the working directory contains the .wiff or .RAW files
   groups<-get.labels(con=paste(wd,"mapDIA.parameters",collapse="",sep=""))
-  
   tmp<-mapDIAinput[,1:3]
   group.n<-list()
+  tmp.area.cols<-grep("Area",names(mapDIAinput))
   for(i in 1:length(groups)){
     print(i)
-    tmp<-cbind(tmp,mapDIAinput[,grep(paste(groups[i],"",sep="."),names(mapDIAinput),fixed=T,value=T)])
-    group.n[[paste(groups[i])]]<-length(mapDIAinput[,grep(paste(groups[i],"",sep="."),names(mapDIAinput),fixed=T,value=T)])
+    groupcol<-grep(groups[i],names(mapDIAinput)[tmp.area.cols],fixed=F,value=F)
+    tmp<-cbind(tmp,mapDIAinput[,tmp.area.cols[groupcol]])
+
+    group.n[[paste(groups[i])]]<-length(groupcol)
   }
 
   tmp<-cbind(tmp,"RT"=mapDIAinput[,"RT"])
@@ -369,8 +375,9 @@ if(length(args)==5){
   prepMapDIAin(ptmProphName=args[1],skyline.output=args[2],ptm.score = args[3],modstring= args[4], wd=args[5],namemapping = nm, protlvl.correction = correct)
 }
 
+#prepMapDIAin(ptmProphName = "", skyline.output= "C:/Goeztman/2016_0826_mapDIA.csv", modstring= "K:100.016",wd="C:/Goeztman/")
 
-
+#
 #prepMapDIAin(ptmProphName = "C:/urine_test2/ptmProphet-output-file.ptm.pep.xml",skyline.output = "C:/urine_test2/2016_0826_mapDIA.csv", wd = "C:/urine_test2/", protlvl.correction = FALSE)
 
 
