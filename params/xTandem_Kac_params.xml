@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bioml>
 
-	<note> DEFAULT PARAMETERS. The value of "isb_default_input_kscore.xml" is recommended. Change to "isb_default_input_native.xml" for native X!Tandem scoring.</note> 
-	<note type="input" label="list path, default parameters">C:\inetpub\wwwroot\ISB\data\parameters\isb_default_input_kscore.xml</note>
+	<note> DIA-PIPE REQUIRED, SET THIS TO THE FULL PATH TO THE kscore X!tandem parameters downloaded with TPP</note> 
+	<note type="input" label="list path, default parameters">Z:\Sushanth\parameters\isb_default_input_kscore.xml</note>
 
-	<note> FILE LOCATIONS. Replace them with your input (.mzXML) file and output file -- these are REQUIRED. Optionally a log file and a sequence output file of all protein sequences identified in the first-pass can be specified. Use of FULL path (not relative) paths is recommended. </note>
+	<note> DIA-PIPE REQUIRED FILE LOCATIONS, DO NOT EDIT OR REMOVE THESE LINES  </note>
+	<note type="input" label="spectrum, path">/tpp.data/nesvi/DIAUmpire/Pedro_Benchmark/workdir_v4/pseudo_msms/lgillet_I150211_008_Q1.mzXML</note>
 	<note type="input" label="spectrum, use conditioning">yes</note>
 	<note type="input" label="output,maximum valid expectation value">50</note>
-	<note type="input" label="spectrum, threads">12</note>
-	<note type="input" label="output, log path"></note>
+	<note type="input" label="output, path">/tpp.data/nesvi/DIAUmpire/Pedro_Benchmark/workdir_v4/tandem/lgillet_I150211_008_Q1.xml</note>
+	<note type="input" label="protein, taxon">mydatabase</note>
 	<note type="input" label="output, sequence path"></note>
-	
-	<note> TAXONOMY FILE. This is a file containing references to the sequence databases. Point it to your own taxonomy.xml if needed.</note>
+	<note type="input" label="spectrum, threads">26</note>
+
+	<note> DIA-PIPE REQUIRED TAXONOMY FILE, DO NOT DELETE OR CHANGE THIS LINE</note>
+	<note type="input" label="list path, taxonomy information">/tpp.data/nesvi/DIAUmpire/Pedro_Benchmark/workdir_v4/tandem_config/taxonomy.xml</note>
 
 	<note> PROTEIN SEQUENCE DATABASE. This refers to identifiers in the taxomony.xml, not the .fasta files themselves! Make sure the database you want is present as an entry in the taxonomy.xml referenced above. This is REQUIRED. </note>
 
