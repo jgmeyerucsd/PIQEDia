@@ -11,7 +11,7 @@
 	<note type="input" label="output, path">/tpp.data/nesvi/DIAUmpire/Pedro_Benchmark/workdir_v4/tandem/lgillet_I150211_008_Q1.xml</note>
 	<note type="input" label="protein, taxon">mydatabase</note>
 	<note type="input" label="output, sequence path"></note>
-	<note type="input" label="spectrum, threads">26</note>
+	<note type="input" label="spectrum, threads">2</note>
 
 	<note> DIA-PIPE REQUIRED TAXONOMY FILE, DO NOT DELETE OR CHANGE THIS LINE</note>
 	<note type="input" label="list path, taxonomy information">/tpp.data/nesvi/DIAUmpire/Pedro_Benchmark/workdir_v4/tandem_config/taxonomy.xml</note>

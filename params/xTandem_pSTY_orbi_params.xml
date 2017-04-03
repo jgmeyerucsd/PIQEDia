@@ -13,7 +13,7 @@
 	<note type="input" label="output, sequence path"></note>
 	<note type="input" label="spectrum, threads">26</note>
 
-	<note> DIA-PIPE REQUIRED TAXONOMY FILE, CHANGE THIS VALUE TO THE FULL PATH OF YOUR taxonomy.xml FILE CONTAINING THE LOCATION OF YOUR DATABASE CONTAINING DECOYS</note>
+	<note> DIA-PIPE REQUIRED TAXONOMY FILE, THIS WILL BE UPDATED BY THE SOFTWARE DO NOT REMOVE THIS LINE</note>
 	<note type="input" label="list path, taxonomy information">/tpp.data/nesvi/DIAUmpire/Pedro_Benchmark/workdir_v4/tandem_config/taxonomy.xml</note>
 
 	<note> PROTEIN SEQUENCE DATABASE. This refers to identifiers in the taxomony.xml, not the .fasta files themselves! Make sure the database you want is present as an entry in the taxonomy.xml referenced above. This is REQUIRED. </note>
