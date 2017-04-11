@@ -40,6 +40,7 @@ public class CreateWiffToMzxml {
 				WiffMzmlBatFile.append("--mzXML").append(" ");
 				WiffMzmlBatFile.append("--filter \"peakPicking vendor msLevel=1-\"").append(" ");
 				WiffMzmlBatFile.append("--32").append(" ");
+				WiffMzmlBatFile.append("--zlib").append(" ");
 				WiffMzmlBatFile.append("--outfile").append(" ");
 				WiffMzmlBatFile.append(file.getAbsolutePath().replace(".wiff", ".mzXML"));
 				WiffMzmlBatFile.append(" : ");

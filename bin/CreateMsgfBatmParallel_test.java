@@ -14,7 +14,7 @@ import java.util.*;
 import java.lang.Integer;
 import java.lang.Runtime;
 // add part that checks if the number of cores is greater than the number of files and vice versa
-public class CreateMsgfBatmParallel {
+public class CreateMsgfBatmParallel_test {
 	
 	static StringBuffer MSGFBatFile = new StringBuffer();
 	static StringBuffer msgfBatFileMain = new StringBuffer();
@@ -78,7 +78,7 @@ public class CreateMsgfBatmParallel {
 				MSGFBatFile.append( " -o " + parameters[0] + "\\" + file.getName().replace(".mzXML", "_MSGF.mzid") );
 				MSGFBatFile.append( " -thread 1");
 				MSGFBatFile.append( " -t " + parameters[2] );
-				MSGFBatFile.append( " -tda 1 -ti "+ parameters[8]+ " -inst 2");
+				MSGFBatFile.append( " -tda 1 -ti "+ parameters[8]+ " -inst 2 -m 3");
 				MSGFBatFile.append( " -e " + parameters[3] );
 				MSGFBatFile.append( " -ntt " + parameters[7] );
 				MSGFBatFile.append( " -mod " + parameters[4] );		
