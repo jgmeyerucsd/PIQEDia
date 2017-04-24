@@ -133,7 +133,17 @@ protlvlcorrection = function(sitelevels=mapDIAinput, proteinlevels="proteinlevel
   pl.colnames<-names(pl)
   sl.colnames<-names(sl)
   sl.areacols<-grep("Area",sl.colnames)
+  ### if protein level column names are missing "Area" append this
+  if(length(grep(pl.colnames,pattern="Area"))==0){
+    names(pl)[2:ncol(pl)]<-paste(names(pl)[2:ncol(pl)],"Area",sep=".")
+    pl.colnames<-names(pl)
+  }
   pos.in.pl<-match(sl.colnames[sl.areacols],pl.colnames)
+  ### setup something to warn about missing protein values eventually
+  #if(length(na.omit(pos.in.pl))==0){
+  #  warning()
+  #}
+  
   ### check if a column is missing in protlevel and omit
   if(length(sl.areacols)!=length(pos.in.pl)){
     sl<-subset(sl,select=-sl.areacols[is.na(pos.in.pl)==TRUE])
@@ -186,14 +196,14 @@ get.labels=function(con="C:/urineALL/mapDIA.parameters"){
 ####################################################################################
 
 #ptmProphName ="C:/urineALL/ptmProphet-output-file.ptm.pep.xml"
-prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep.xml", 
-                            skyline.output= "C:/urineALL/2016_0826_mapDIA.csv", 
-                            ptm.score=0.99,
-                            modstring= "STY:79.966",
-                            wd="C:/urineALL/",
-                            namemapping=FALSE,
-                            protlvl.correction=TRUE)
-  {
+prepMapDIAin=function(ptmProphName = "", 
+                      skyline.output= "2016_0826_mapDIA.csv", 
+                      ptm.score=0.99,
+                      modstring= "K:42.0105",
+                      wd=getwd(),
+                      namemapping=TRUE,
+                      protlvl.correction=TRUE)
+{
   setwd(wd)
   
   #### read in skyline file, reformat, check which lines are significant in the ptmprophet
@@ -212,7 +222,7 @@ prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep
   nmods<-sapply(regmatches(mod.peps.full, gregexpr(modmass4sky, mod.peps.full)), length)
   skyline.mod.results.summary<-data.frame(mod.peps.full,mod.peps.cleaned,nmods)
   
-
+  
   
   if(nchar(ptmProphName)>7){    #### check if there was a real pep.xml file input
     ### check for xml package otherwise install
@@ -272,15 +282,17 @@ prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep
   #m.temp2<-s.uni[,c(area.columns,RTcol)]
   mapDIAinput<-cbind(tmp,s.pos[,RTcol])
   names(mapDIAinput)[length(names(mapDIAinput))]<-"RT"
-
+  
   mapDIAinput[mapDIAinput=="#N/A"]<-"NA"
-  names(mapDIAinput)[length(names(mapDIAinput))]<-"RT"
   head(mapDIAinput)
-
+  
   #### with protein level correction
   if(protlvl.correction==TRUE){
     print("correcting protein levels")
     mapDIAinput<-protlvlcorrection(sitelevels=mapDIAinput, proteinlevels="proteinlevels.txt",dir=wd)
+  }
+  if(protlvl.correction==FALSE){
+    print("no protein level correction or proteinlevels.txt missing")
   }
   
   ##### finally, assign name mapping table if provided
@@ -289,22 +301,36 @@ prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep
   
   
   ### if namemapping file exists, replace columns with group headers
+  ### make it also count the number of columns per group for updating the mapdia.params
   if(namemapping==TRUE){
     namemap<-read.delim("name_mapping.txt",header = T,stringsAsFactors = F,colClasses = "character")
     n.groups<-ncol(namemap)
     groups<-colnames(namemap)
+    group.n<-c()
+    groupcol.index<-c()
     for(x in groups){
+      print(x)
       tmp.grp.nm<-namemap[,x][nchar(namemap[,x])>1]
       grp.cols<-grep(paste(tmp.grp.nm,sep="|",collapse = "|"), colnames(mapDIAinput))
       i=1
+      groupcol.index<-c( groupcol.index,grp.cols)
       for(y in grp.cols){
+
         colnames(mapDIAinput)[y]<-paste(x,i,sep = ".")
         i=i+1
       }
+      
+      group.n<-c(group.n,i-1)
     }
+    
+    finalout<-mapDIAinput
+    ### reorder to appropriate order
+    finalout<-finalout[,c(1:3,groupcol.index)]
+    finalout<-cbind(finalout,RT=mapDIAinput[grep("RT",colnames(mapDIAinput))])
   }
-  
-  
+  #colnames(finalout)
+  #head(finalout)
+
   print(paste(wd,"mapDIA.parameters",collapse="",sep=""))
   
   if(substr(wd,start=nchar(wd),stop=nchar(wd))!="/"){
@@ -314,28 +340,33 @@ prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep
   }
   
   #### NEED FIX: this part requires that mapDIA.parameters is present in the directory
-  #### also requires that the working directory contains the .wiff or .RAW files
-  groups<-get.labels(con=paste(wd,"mapDIA.parameters",collapse="",sep=""))
-  tmp<-mapDIAinput[,1:3]
-  group.n<-list()
-  tmp.area.cols<-grep("Area",names(mapDIAinput))
-  for(i in 1:length(groups)){
-    print(i)
-    groupcol<-grep(groups[i],names(mapDIAinput)[tmp.area.cols],fixed=F,value=F)
-    tmp<-cbind(tmp,mapDIAinput[,tmp.area.cols[groupcol]])
-
-    group.n[[paste(groups[i])]]<-length(groupcol)
+  if(namemapping==FALSE){
+    groups<-get.labels(con=paste(wd,"mapDIA.parameters",collapse="",sep=""))
+    tmp<-mapDIAinput[,1:3]
+    group.n<-list()
+    tmp.area.cols<-grep("Area",names(mapDIAinput))
+    for(i in 1:length(groups)){
+     print(i)
+     groupcol<-grep(groups[i],names(mapDIAinput)[tmp.area.cols],fixed=F,value=F)
+     tmp<-cbind(tmp,mapDIAinput[,tmp.area.cols[groupcol]])
+    
+     group.n[[paste(groups[i])]]<-length(groupcol)
+   }
+  
+    tmp<-cbind(tmp,"RT"=mapDIAinput[,"RT"])
+    finalout<-tmp
   }
-
-  tmp<-cbind(tmp,"RT"=mapDIAinput[,"RT"])
   
+  ### TODO: if mapDIA.parameters is missing, make one
+  #if(length(list.files(pattern="mapDIA.parameters2")==0)){}
   
-  #### update the condition numbering in mapDIA.parameters
+  #### update the (1) condition numbering and the (2) min observed len in mapDIA.parameters
   mp.lines<-readLines(paste(wd,"mapDIA.parameters",collapse="",sep=""))
   mp.lines[grep("SIZE=",mp.lines)]<-paste(c("SIZE=",unlist(group.n)),sep=" ",collapse=" ")
+  mp.lines[grep("MIN_OBS=", mp.lines)]<-paste(c("MIN_OBS=",  rep(2,length(groups))),sep= " ",collapse=" ")
   writeLines(mp.lines, con="mapDIA.parameters")
   
-  finalout<-tmp
+
   #### without protein level correction
   head(finalout)
   print("writing mapDIA input file")
@@ -351,7 +382,7 @@ prepMapDIAin=function(ptmProphName = "C:/urineALL/ptmProphet-output-file.ptm.pep
 ##### actually do stuff here
 #############################################################################################
 setwd(args[5])
-#setwd("C:/urineALL/")
+setwd("~/R24/piqed_sitelvl/")
 #getwd()
 #### check for name mapping file exist, if so, fix column names to name map
 nameMapFile<-list.files(pattern="name_mapping.txt")
@@ -360,6 +391,8 @@ if(length(nameMapFile)==1){
   print("condition name mapping file available")
   nm=TRUE
 }
+
+
 #### check if protein level quantification file exists, and if so, correct files to protein level
 protlvlfile<-list.files(pattern="proteinlevels.txt")
 correct=FALSE
@@ -372,7 +405,7 @@ if(length(protlvlfile)==1){
 if(length(args)<5) print("missing arguments to command line")
 if(length(args)==5){
   print("starting R...")
-  prepMapDIAin(ptmProphName=args[1],skyline.output=args[2],ptm.score = args[3],modstring= args[4], wd=args[5],namemapping = nm, protlvl.correction = correct)
+  prepMapDIAin(ptmProphName=args[1],skyline.output=args[2],ptm.score = args[3],modstring= args[4], wd=args[5],namemapping = TRUE, protlvl.correction = TRUE)
 }
 
 #prepMapDIAin(ptmProphName = "", skyline.output= "C:/Goeztman/2016_0826_mapDIA.csv", modstring= "K:100.016",wd="C:/Goeztman/")
