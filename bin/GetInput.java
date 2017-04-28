@@ -397,8 +397,7 @@ public class GetInput extends JPanel {
                     "outputDirText::C:\\",
                     "numOfThreadsText::56",
                     "amountOfRamText::128",
-					"AB_SCIEX_MS_ConverterDirText::C:\\Program Files (x86)\\AB SCIEX\\" +
-					                      "MS Data Converter\\AB_SCIEX_MS_Converter.exe",
+					"AB_SCIEX_MS_ConverterDirText::DEPRECIATED_DO_NOT_CHANGE",
 					"msconvertDirText::C:\\Program Files\\ProteoWizard\\ProteoWizard 3.0.9844\\" +
 					                                                              "msconvert.exe",
 					"indexmzXMLDirText::C:\\Inetpub\\tpp-bin\\indexmzXML.exe",
@@ -406,8 +405,8 @@ public class GetInput extends JPanel {
 					"fastaDirText::EX:      C:\\...\\20150427_mouse_sprot.cc.fasta",
 					"ppmText::15ppm",
 					"enzymeText::1",
-					"nttText::1",
-					"tiText::0",
+					"nttText::2",
+					"tiText::0,0",
 					"mapDIALabelsText::EX:    2wk_chow_ctl, 2wk_chow_fruc, 2wf_chow_gluc",
 					"modsDirText::EX:      C:\\...\\Mods_acetyl.txt",
 					"paramsXMLDirText::C:\\Users\\Sushanth\\xTandem_MAIN_params.xml",
