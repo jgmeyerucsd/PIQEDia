@@ -50,6 +50,7 @@ MSConvertExe = sys.argv[2]
 IndexMZXMLExe = sys.argv[3]
 DIAUmpireSEJar = sys.argv[4]
 MzxmlToMgfParams = sys.argv[5]
+userRAM = sys.argv[6]
 
 ################################################################################
 #
@@ -156,7 +157,7 @@ def umpire_mzxml(input_file,debug=False):
 			# -Xmx60G might change
 			#
 			#
-			command = ["java", "-Xmx128G", "-jar", DIAUmpireSEJar, input_file, MzxmlToMgfParams, "pause"]
+			command = ["java", "-Xmx"+userRAM+"G", "-jar", DIAUmpireSEJar, input_file, MzxmlToMgfParams, "pause"]
 	run_mgf_subprocess(command)
 		
 #mgf to mzxml (proteowizard)

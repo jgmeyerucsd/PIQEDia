@@ -81,8 +81,7 @@ public class GetInput extends JPanel {
 	private JTextField outputDir_Text = new JTextField("C:\\Users\\");
 	private JTextField numOfThreads_Text = new JTextField("56");
 	private JTextField amountOfRam_Text = new JTextField("128");
-	private JTextField ab_Sciex_Ms_ConverterDir_Text = new JTextField("C:\\Program Files (x86)\\" +
-		                                  "ABSCIEX\\MS Data Converter\\AB_SCIEX_MS_Converter.exe");
+	private JTextField ab_Sciex_Ms_ConverterDir_Text = new JTextField("DEPRECIATED_DO_NOT_CHANGE");
 	private JTextField msconvertDir_Text = new JTextField("C:\\Program Files\\ProteoWizard\\" + 
 		                                               "ProteoWizard 3.0.9844\\msconvert.exe");
 	private JTextField indexmzXMLDir_Text = new JTextField("C:\\Inetpub\\tpp-bin\\indexmzXML.exe");

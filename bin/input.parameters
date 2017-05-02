@@ -1,13 +1,13 @@
 Keep this line
-C:\Users
-C:\Users
-56
-128
-C:\
-C:\
-C:\
-C:\
-C:\
+C:\halfFull
+C:\halfFull
+50
+90
+DEPRECIATED_DO_NOT_CHANGE
+C:\Program Files\ProteoWizard\ProteoWizard 3.0.10730\msconvert.exe
+C:\Inetpub\tpp-bin\indexmzXML.exe
+C:\DIAump.v2.1.2\v2.1.2\DIA_Umpire_SE.jar
+C:\Users\jmeyer\Documents\GitHub\DIA-PIQE\params\diaumpire_se.params
 C:\
 C:\
 25ppm
@@ -33,18 +33,18 @@ C:\
 K,#,M,#,nQ,#
 ###
 ###
-EX:    ko wt
-
-
-
-
-
-
-false
-false
-false
-false
-false
-false
-false
+mapDIALabels
+C:\
+C:\
+C:\
+C:\
+empty
+C:\
 true
+false
+false
+false
+false
+false
+false
+false

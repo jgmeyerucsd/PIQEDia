@@ -462,7 +462,7 @@ IF "%RunDiaUmpirePipe%"=="true" (
 		echo|set /p= Running DIA-Umpire SE
 		echo:
 		echo ----------------------------------
-		C:\python27\python.exe diaUmpire_pipe.py %OutputDir% "%MSConvertExe%" "%IndexMZXMLExe%" "%DIAUmpireSEJar%" "%MzxmlToMgfParams%"
+		C:\python27\python.exe diaUmpire_pipe.py %OutputDir% "%MSConvertExe%" "%IndexMZXMLExe%" "%DIAUmpireSEJar%" "%MzxmlToMgfParams%" "%AmountOfRam%"
 		echo:
 		echo|set /p=DIA-Umpire SE complete, converting .mgf to .mzXML
 		echo:
