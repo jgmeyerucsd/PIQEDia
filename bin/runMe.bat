@@ -413,7 +413,6 @@ IF "%RunDiaUmpirePipe%"=="true" (
 	echo:
 	echo ---------------------------------------
 	echo:
-	echo %CurrentDir%
 	echo:
 	IF exist *.raw (
 		IF exist *.mzXML (

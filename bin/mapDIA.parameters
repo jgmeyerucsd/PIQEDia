@@ -1,5 +1,5 @@
 ###input file
-FILE =C:\urineALL\mapDIA_Input.txt
+FILE =C:\halfFull\mapDIA_Input.txt
 
 
 ###Experimental Design
@@ -13,17 +13,17 @@ NORMALIZATION = NONE
 ### Filter
 SDF=2
 MIN_CORREL=0.2
-MIN_OBS= 2 2 2
+MIN_OBS= 2 2
 MIN_FRAG_PER_PEP = 3
 MAX_FRAG_PER_PEP = 13
 MIN_PEP_PER_PROT = 1
 
 
 ### Sample information
-LABELS= pain UTI OC
+LABELS= halfDIA fullDIA
 
 ###
-SIZE= 12 11 11
+SIZE= 3 3
 
 ### min. max. DE
 MIN_DE= .01
@@ -32,9 +32,8 @@ MAX_DE =.99
 
 ### Contrast matrix for group conversion
 CONTRAST=
-- 0 0
-1 - 0
-1 0 -
+- 1
+0 -
 
 
 
