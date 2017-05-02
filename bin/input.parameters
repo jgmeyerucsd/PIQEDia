@@ -33,13 +33,13 @@ C:\
 K,#,M,#,nQ,#
 ###
 ###
-mapDIALabels
-C:\
-C:\
-C:\
-C:\
-empty
-C:\
+EX:    ko wt
+
+
+
+
+
+
 false
 false
 false
@@ -47,4 +47,4 @@ false
 false
 false
 false
-false
+true

@@ -118,8 +118,8 @@ public class GetInput extends JPanel {
 	private JTextField skylineTemplateDoc_Text = new JTextField("EX:    C:\\default_empty.sky");
 	private JTextField skylineXMLFile_Text = new JTextField("EX:    C:\\ptmProphet-output-file.ptm.pep.xml");
 	private JTextField ptmProphetExe_Text = new JTextField("C:\\Inetpub\\tpp-bin\\PTMProphetParser");
-	private JTextField ptmProphetParserMasses_Text = new JTextField("K,42.010565,M,15.9949," +
-		                                                                     "nQ,-17.026549,NQ,0.984016");
+	private JTextField ptmProphetParserMasses_Text = new JTextField("K:42.010565,M:15.9949," +
+		                                                                     "nQ:-17.026549,NQ:0.984016");
 	private JTextField ptmProphetParserMZTOL_Text = new JTextField("0.055");
 	private JTextField ptmProphetParserMINPROB_Text = new JTextField("0.5");
 
@@ -427,9 +427,9 @@ public class GetInput extends JPanel {
 					"skylineTemplateDocText::EX:    C:\\default_empty.sky",
 					"skylineXMLFileText::EX:    C:\\ptmProphet-output-file.ptm.pep.xml",
 					"ptmProphetExeText::C:\\Inetpub\\tpp-bin\\PTMProphetParser.exe",
-					"ptmProphetParserMassesText::K,42.010565,M,15.9949,nQ,-17.026549",
+					"ptmProphetParserMassesText::K:42.010565,M:15.9949,nQ:-17.026549",
 					"ptmProphetParserMZTOLText::0.055",
-					"ptmProphetParserMINPROBText::0.5"
+					"ptmProphetParserMINPROBText::0.9"
                 };
 
                 /* Calls setFieldData to put the default information in the JTextFields */
@@ -559,11 +559,11 @@ public class GetInput extends JPanel {
             public void actionPerformed(ActionEvent e) {
 
             	if(mapDIAClosed) {
-            		if(runOnce == 0) {
+            		/*if(runOnce == 0) {
             			JOptionPane.showMessageDialog(null, "Enter General Info correctly before continuing");
             			runOnce++;
             			return;
-            		}
+       } */
 
             		String mapDiaLabelsStr = mapDIALabels_Text.getText() + ",";
             		mapDiaLabelsStr = mapDiaLabelsStr.replaceAll("\\s", "");
@@ -1144,7 +1144,7 @@ public class GetInput extends JPanel {
         componentMap.put("ptmProphetExeText", new GridItem(ptmProphetExe_Text,
         	                               true, horizontalPosition+1, verticalPosition, 1, 1));
 		componentMap.put("ptmProphetParserMasses", new GridItem(new JLabel("<html>Enter the " +
-			                                 "masses in this<br> format: K,#,M,#,nQ,#</html>"), false,
+			                                 "masses in this<br> format: [residue:mass,residue:mass]</html>"), false,
 		                                              horizontalPosition, ++verticalPosition));
         componentMap.put("ptmProphetParserMassesText", new GridItem(ptmProphetParserMasses_Text,
         	                               true, horizontalPosition+1, verticalPosition, 1, 1));
