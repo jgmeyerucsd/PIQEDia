@@ -1611,7 +1611,7 @@ public class GetInput extends JPanel {
 
         		otherConstraints.gridx = 0;
         		otherConstraints.gridy = ++y;
-        		northPane.add(new JLabel("<html>PTMprophet modstring<br>e.g. STY79.966</html> "), otherConstraints);
+        		northPane.add(new JLabel("<html>PTMprophet modstring<br>e.g. K:42.011</html> "), otherConstraints);
         		otherConstraints.gridx = 1;
         		otherConstraints.gridy = y;
         		mapDIA_masses.setPreferredSize( new Dimension(textFieldWidth, textFieldHeight) );

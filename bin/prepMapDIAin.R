@@ -199,7 +199,7 @@ get.labels=function(con="C:/urineALL/mapDIA.parameters"){
 prepMapDIAin=function(ptmProphName = "", 
                       skyline.output= "2016_0826_mapDIA.csv", 
                       ptm.score=0.99,
-                      modstring= "K:42.0105",
+                      modstring= "K:42.011",
                       wd=getwd(),
                       namemapping=TRUE,
                       protlvl.correction=TRUE)
@@ -232,7 +232,11 @@ prepMapDIAin=function(ptmProphName = "",
     doc<-xmlParse(ptmProphName)
     ptm.score<-as.numeric(ptm.score)
     namespaces<-c(ns="http://regis-web.systemsbiology.net/pepXML")
-    tides = unlist(xpathApply(doc, "//ns:ptmprophet_result[@ptm='PTMProphet_STY79.966']", xmlGetAttr, "ptm_peptide", namespaces = namespaces ))
+    xmlmodstring<-paste("//ns:ptmprophet_result[@ptm='PTMProphet_",gsub(modstring,pattern=":",replacement = ""),"\']",sep="")
+    tides = unlist(xpathApply(doc, xmlmodstring, xmlGetAttr, "ptm_peptide", namespaces = namespaces ))
+    if(is.null(tides)){
+      stop(paste("no modified peptides with", modstring))
+    }
     cleaned<-sapply(FUN=gsub,"([(])([0-9])(.)([0-9]+)())",x=tides,replacement="")
     probstrings<-gsub("[A-Z]+", "", tides)
     probstr.a<-strsplit(probstrings,split="[\\)\\(]")
@@ -270,6 +274,11 @@ prepMapDIAin=function(ptmProphName = "",
   head(s)
   #### check that modstring is appropriate
   ################
+  
+  if(unlist(gregexpr(modstring,pattern=":"))<1){
+    
+    
+  }
   s.pos<-multimod.pos.protein(table=s,modmasses=modstring)
   #names(s.pos)[1] <- "site"
   #s.unisite <- paste(s.pos[,"uniprot"], s.pos[,"site"], sep="_")  
@@ -382,7 +391,10 @@ prepMapDIAin=function(ptmProphName = "",
 ##### actually do stuff here
 #############################################################################################
 setwd(args[5])
-setwd("~/R24/piqed_sitelvl/")
+#setwd("~/R24/piqed_sitelvl/")
+#args<-c("ptmProphet-output-file.ptm.pep.xml","PIQED_mapDIA.csv","0.99","K42.011","C:/halfFull")
+
+#setwd("~/R24/piqed_sitelvl/")
 #getwd()
 #### check for name mapping file exist, if so, fix column names to name map
 nameMapFile<-list.files(pattern="name_mapping.txt")
@@ -405,13 +417,5 @@ if(length(protlvlfile)==1){
 if(length(args)<5) print("missing arguments to command line")
 if(length(args)==5){
   print("starting R...")
-  prepMapDIAin(ptmProphName=args[1],skyline.output=args[2],ptm.score = args[3],modstring= args[4], wd=args[5],namemapping = TRUE, protlvl.correction = TRUE)
+  prepMapDIAin(ptmProphName=args[1],skyline.output=args[2],ptm.score = args[3],modstring= args[4], wd=args[5],namemapping = nm, protlvl.correction = correct)
 }
-
-#prepMapDIAin(ptmProphName = "", skyline.output= "C:/Goeztman/2016_0826_mapDIA.csv", modstring= "K:100.016",wd="C:/Goeztman/")
-
-#
-#prepMapDIAin(ptmProphName = "C:/urine_test2/ptmProphet-output-file.ptm.pep.xml",skyline.output = "C:/urine_test2/2016_0826_mapDIA.csv", wd = "C:/urine_test2/", protlvl.correction = FALSE)
-
-
-

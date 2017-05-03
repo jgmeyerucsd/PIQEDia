@@ -32,8 +32,8 @@ MAX_DE =.99
 
 ### Contrast matrix for group conversion
 CONTRAST=
-- 1
-0 -
+- 0
+1 -
 
 
 
