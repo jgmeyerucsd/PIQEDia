@@ -1,5 +1,6 @@
 @echo off
 
+cd %~dp0
 
 set CurrentDir=%CD%
 
