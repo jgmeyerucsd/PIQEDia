@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bioml>
+
+	<note> DIA-PIPE REQUIRED, SET THIS TO THE FULL PATH TO THE kscore X!tandem parameters downloaded with TPP</note> 
+	<note type="input" label="list path, default parameters">Z:\Sushanth\parameters\isb_default_input_kscore.xml</note>
+
+	<note> DIA-PIPE REQUIRED FILE LOCATIONS, DO NOT EDIT OR REMOVE THESE LINES  </note>
+	<note type="input" label="spectrum, path">/tpp.data/nesvi/DIAUmpire/Pedro_Benchmark/workdir_v4/pseudo_msms/lgillet_I150211_008_Q1.mzXML</note>
+	<note type="input" label="spectrum, use conditioning">yes</note>
+	<note type="input" label="output,maximum valid expectation value">50</note>
+	<note type="input" label="output, path">/tpp.data/nesvi/DIAUmpire/Pedro_Benchmark/workdir_v4/tandem/lgillet_I150211_008_Q1.xml</note>
+	<note type="input" label="protein, taxon">mydatabase</note>
+	<note type="input" label="output, sequence path"></note>
+	<note type="input" label="spectrum, threads">2</note>
+
+	<note> DIA-PIPE REQUIRED TAXONOMY FILE, DO NOT DELETE OR CHANGE THIS LINE</note>
+	<note type="input" label="list path, taxonomy information">/tpp.data/nesvi/DIAUmpire/Pedro_Benchmark/workdir_v4/tandem_config/taxonomy.xml</note>
+
+	<note> PROTEIN SEQUENCE DATABASE. This refers to identifiers in the taxomony.xml, not the .fasta files themselves! Make sure the database you want is present as an entry in the taxonomy.xml referenced above. This is REQUIRED. </note>
+
+	<note> PRECURSOR MASS TOLERANCES. In the example below, a 10ppm (monoisotopic mass) window is searched for peptide candidates. </note>
+	<note type="input" label="spectrum, parent monoisotopic mass error minus">20</note>
+	<note type="input" label="spectrum, parent monoisotopic mass error plus">20</note>
+	<note type="input" label="spectrum, parent monoisotopic mass error units">ppm</note>
+	<note>The value for this parameter may be 'Daltons' or 'ppm': all other values are ignored</note>
+	<note type="input" label="spectrum, parent monoisotopic mass isotope error">yes</note>
+	<note type="input" label="spectrum, minimum peaks">3</note>
+	<note type="input" label="spectrum, total peaks">160</note>	
+	<note type="input" label="spectrum, fragment monoisotopic mass error">30</note>
+	<note type="input" label="spectrum, fragment monoisotopic mass error units">ppm</note>
+	<note>The value for this parameter may be 'Daltons' or 'ppm': all other values are ignored</note>
+	<note>This allows peptide candidates in windows around -1 Da and -2 Da from the acquired mass to be considered. Only applicable when the minus/plus window above is set to less than 0.5 Da. Good for accurate-mass instruments for which the reported precursor mass is not corrected to the monoisotopic mass. </note>
+
+
+	<note> MODIFICATIONS. In the example below, there is a static (carbamidomethyl) modification on C, and variable modifications on M (oxidation). Multiple modifications can be separated by commas, as in "80.0@S,80.0@T". Peptide terminal modifications can be specified with the symbol '[' for N-terminus and ']' for C-terminus, such as 42.0@[ .  </note>
+	<note type="input" label="residue, potential modification mass">15.994915@M,100.016044@K</note>
+	<note> Add labeling modification by replacing this line</note>
+	<note type="input" label="residue, modification mass">57.021464@C</note>
+	
+	<note type="input" label="residue, potential modification motif"></note>
+	<note> You can specify a variable modification only when present in a motif. For instance, 0.998@N!{P}[ST] is a deamidation modification on N only if it is present in an N[any but P][S or T] motif (N-glycosite). </note>
+	<note type="input" label="protein, N-terminal residue modification mass">42.010565@K</note>
+	<note type="input" label="protein, C-terminal residue modification mass"></note>
+	<note> These are *static* modifications on the PROTEINS' N or C-termini. </note>
+
+	<note> SEMI-TRYPTICS AND MISSED CLEAVAGES. In the example below, semitryptic peptides are allowed, and up to 2 missed cleavages are allowed. </note>
+	<note type="input" label="protein, cleavage site">[RK]|{P}</note>
+	<note type="input" label="protein, cleavage semi">no</note>
+	<note type="input" label="scoring, maximum missed cleavage sites">2</note>
+	<note type="input" label="scoring, minimum ion count">3</note>
+
+	<note> REFINEMENT. Do not use unless you know what you are doing. Set "refine" to "yes" and specify what you want to search in the refinement. For non-confusing results, repeat the same modifications you set above for the first-pass here.</note>
+	<note type="input" label="refine">no</note>
+	<note type="input" label="refine, maximum valid expectation value">10</note>
+	<note type="input" label="refine, potential modification mass">15.994915@M,42.010565@K</note>
+	<note type="input" label="refine, potential modification motif"></note>
+	<note type="input" label="refine, cleavage semi">no</note>
+	<note type="input" label="refine, unanticipated cleavage">no</note>
+	<note type="input" label="refine, potential N-terminus modifications">42.010565@K</note>
+	<note type="input" label="refine, potential C-terminus modifications"></note>
+	<note type="input" label="refine, point mutations">no</note>
+	<note type="input" label="refine, use potential modifications for full refinement">no</note>
+
+</bioml>

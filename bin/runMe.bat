@@ -397,9 +397,9 @@ IF "%RunDiaUmpirePipe%"=="true" (
 			echo --------------------------------
 			echo:
 			cd %CurrentDir%
-			IF "%CompileJava%"=="yes" javac CreateWiffToMzxml.java
-			java CreateWiffToMzxml %OutputDir% %CurrentDir% "%MSConvertExe%" %NumOfThreads%
-			IF "%CompileJava%"=="yes" rm CreateWiffToMzxml.class
+			IF "%CompileJava%"=="yes" javac CreateWiffToMzxmlmp.java
+			java CreateWiffToMzxmlmp %OutputDir% %CurrentDir% "%MSConvertExe%" %NumOfThreads%
+			IF "%CompileJava%"=="yes" rm CreateWiffToMzxmlmp.class
 			cd %OutputDir%
 			call WiffToMzxml.bat
 			cd %CurrentDir%
