@@ -56,6 +56,7 @@ public class CreateSkylineFiles {
 					skylineCommandsTxtFile.append("--in=");
 					skylineCommandsTxtFile.append(skylineTemplateDoc).append(" ");
 					skylineCommandsTxtFile.append("--dir=").append(outputDirStr).append(" ");
+					skylineCommandsTxtFile.append("--import-search-add-mods").append(" ");
 					skylineCommandsTxtFile.append("--import-search-file=");
 					skylineCommandsTxtFile.append(file.getAbsolutePath()).append(" ");
 					skylineCommandsTxtFile.append("--import-search-cutoff-score=").append("0.99").append(" ");
