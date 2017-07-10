@@ -229,16 +229,11 @@ prepMapDIAin=function(ptmProphName = "",
     if(library(XML,logical.return=T)==FALSE) install.packages("XML")
     if(library(XML, logical.return = T)==TRUE) require(XML)
     print("using PTMprophet localization filter")
-    ptm.score<-as.numeric(ptm.score)
-
-    #### OLD way to read in ptm.pep.xml, EXTREMELY memory intense but fast
     #doc<-xmlParse(ptmProphName)
+    ptm.score<-as.numeric(ptm.score)
     #namespaces<-c(ns="http://regis-web.systemsbiology.net/pepXML")
     #nt<-getNodeSet(doc,xmlmodstring)
-    #xmlmodstring<-paste("//ns:ptmprophet_result[@ptm='PTMProphet_",gsub(modstring,pattern=":",replacement = ""),"\']",sep="")
-    #tides = unlist(xpathApply(doc, xmlmodstring, xmlGetAttr, "ptm_peptide", namespaces = namespaces ))
-    
-    #######  NEW way to find modscores from xml, slower than above
+
     xmlmodstr<-paste("PTMProphet_",gsub(modstring,pattern=":",replacement = ""),sep="")
     con <- file(ptmProphName, "r")
     doc.lines<-readLines(con)
@@ -248,17 +243,19 @@ prepMapDIAin=function(ptmProphName = "",
     tides<-substr(lines2,start=2,stop=nchar(lines2)-2)
 
     
-    #######  another way to find modscores from xml, slowest
-    #lines <- c(rep(0, times=length()))
-    #while(TRUE) {
-    #  line = readLines(con, 1)
-    #  if(length(line) == 0) break
-    #  else if(grepl("ptmprophet_result prior", line, fixed = TRUE)) lines <- c(lines, line)
-    #}
-    #t2<-Sys.time()
-    #t2-t1
 
+    lines <- c(rep(0, times=length()))
+    while(TRUE) {
+      line = readLines(con, 1)
+      if(length(line) == 0) break
+      else if(grepl("ptmprophet_result prior", line, fixed = TRUE)) lines <- c(lines, line)
+    }
+    t2<-Sys.time()
+    t2-t1
 
+    xmlmodstring<-paste("//ns:ptmprophet_result[@ptm='PTMProphet_",gsub(modstring,pattern=":",replacement = ""),"\']",sep="")
+
+    tides = unlist(xpathApply(doc, xmlmodstring, xmlGetAttr, "ptm_peptide", namespaces = namespaces ))
     if(is.null(tides)){
       stop(paste("no modified peptides with", modstring))
     }
