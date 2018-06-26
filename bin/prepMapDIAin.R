@@ -226,7 +226,7 @@ prepMapDIAin=function(ptmProphName = "",
   
   if(nchar(ptmProphName)>7){    #### check if there was a real pep.xml file input
     ### check for xml package otherwise install
-    if(library(XML,logical.return=T)==FALSE) install.packages("XML")
+    if(library(XML,logical.return=T)==FALSE) install.packages("XML",repos="https://cran.cnr.berkeley.edu")
     if(library(XML, logical.return = T)==TRUE) require(XML)
     print("using PTMprophet localization filter")
     ptm.score<-as.numeric(ptm.score)
