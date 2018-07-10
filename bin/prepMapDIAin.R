@@ -121,13 +121,13 @@ protlvlcorrection = function(sitelevels=mapDIAinput, proteinlevels="proteinlevel
   #### run names must be in the same order for both matricies
   setwd(dir)
   sl<-sitelevels
-  sitelvl.proteins<-substr(sitelevels[,1],start=1, stop=6)
+  sitelvl.proteins<-gsub(".*\\||\\|","",sitelevels[,1])
   sl<-cbind(sitelvl.proteins,sl)
   head(sl)
   #sitelvl.unique.prot<-unique(proteins)
   
   pl<-read.delim(proteinlevels,header = T,stringsAsFactors = F)
-  protlvl.proteins<-substr(pl[,1],start=1, stop=6)
+  protlvl.proteins<-gsub(".*\\||\\|","",pl[,1])
   
   #### match the site level columns to the correct protein level columns
   pl.colnames<-names(pl)
@@ -291,7 +291,7 @@ prepMapDIAin=function(ptmProphName = "",
   }
   
   ### reformat filtered report
-  proteins<-substr(start=4,stop=9,x=skyline.filtered[,"Protein"])
+  proteins<-gsub(".*\\||\\|","",skyline.filtered[,"Protein"],perl=T)
   s<-cbind(uniprot=proteins,skyline.filtered)
   
   
