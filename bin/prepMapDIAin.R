@@ -122,12 +122,14 @@ protlvlcorrection = function(sitelevels=mapDIAinput, proteinlevels="proteinlevel
   setwd(dir)
   sl<-sitelevels
   sitelvl.proteins<-gsub(".*\\||\\|","",sitelevels[,1])
+  sitelvl.proteins<-gsub("_.*","",sitelvl.proteins)
   sl<-cbind(sitelvl.proteins,sl)
   head(sl)
   #sitelvl.unique.prot<-unique(proteins)
   
   pl<-read.delim(proteinlevels,header = T,stringsAsFactors = F)
   protlvl.proteins<-gsub(".*\\||\\|","",pl[,1])
+  protlvl.proteins<-gsub(";.*","",protlvl.proteins)
   
   #### match the site level columns to the correct protein level columns
   pl.colnames<-names(pl)
@@ -166,12 +168,11 @@ protlvlcorrection = function(sitelevels=mapDIAinput, proteinlevels="proteinlevel
   m.tot <- as.matrix(merged[,grep(" total", names(merged))])
   m.tot  <-apply(m.tot , 2, as.numeric)
   normalized <- m.mod/m.tot
-  #head(normalized)
   rn<-merged[,c("uniprot_site", "Peptide.Modified.Sequence", "Product.Mz")]
   normalized.final <- cbind(rn, normalized,RT=merged[,"RT"])
   head(normalized.final)
-  #fileout=paste(dir,"mapDIA_input.txt",sep="",col="")
-  normalized.final[normalized.final=="Inf"]<-"NA"
+  normalized.final[normalized.final=="Inf"]<-"NA"   ### remove Inf
+  normalized.final[normalized.final=="NaN"]<-"NA"   ### remove NaN
   #write.table(file=fileout,normalized.final,row.names = F,quote=F,sep="\t")
   normalized.final
 }
@@ -302,9 +303,10 @@ prepMapDIAin=function(ptmProphName = "",
   ################
   
   if(unlist(gregexpr(modstring,pattern=":"))<1){
+    print("wrong format?")
   }
-  
-  
+  #modstring<-"K:42.011"
+  #head(s.pos)
   s.pos<-multimod.pos.protein(table=s,modmasses=modstring)
   #names(s.pos)[1] <- "site"
   #s.unisite <- paste(s.pos[,"uniprot"], s.pos[,"site"], sep="_")  
