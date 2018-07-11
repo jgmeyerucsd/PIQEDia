@@ -292,6 +292,7 @@ prepMapDIAin=function(ptmProphName = "",
   
   ### reformat filtered report
   proteins<-gsub(".*\\||\\|","",skyline.filtered[,"Protein"],perl=T)
+  proteins<-gsub("_.*","",proteins)
   s<-cbind(uniprot=proteins,skyline.filtered)
   
   
