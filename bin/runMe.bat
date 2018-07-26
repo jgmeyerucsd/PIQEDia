@@ -4,21 +4,19 @@ cd %~dp0
 
 set CurrentDir=%CD%
 
-:: starting to modify for orbidata
-:: set this to yes to compile the files as the program executes
 set CompileJava=yes
 
 :check_which_input
-set /p checkInput= Do you have a parameters file for the runMe (ex: ***.parameters) [y/n]: 
-IF "%checkInput%"=="y" goto enter_param_file
-IF "%checkInput%"=="Y" goto enter_param_file
-IF "%checkInput%"=="yes" goto enter_param_file
-IF "%checkInput%"=="Yes" goto enter_param_file
-IF "%checkInput%"=="n" goto get_info
-IF "%checkInput%"=="N" goto get_info
-IF "%checkInput%"=="no" goto get_info
-IF "%checkInput%"=="No" goto get_info
-goto scratch_dir
+:: set /p checkInput= Do you have a parameters file for the runMe (ex: ***.parameters) [y/n]: 
+:: IF "%checkInput%"=="y" goto enter_param_file
+:: IF "%checkInput%"=="Y" goto enter_param_file
+:: IF "%checkInput%"=="yes" goto enter_param_file
+:: IF "%checkInput%"=="Yes" goto enter_param_file
+:: IF "%checkInput%"=="n" goto get_info
+:: IF "%checkInput%"=="N" goto get_info
+:: IF "%checkInput%"=="no" goto get_info
+:: IF "%checkInput%"=="No" goto get_info
+:: goto scratch_dir
 
 
 :get_info
