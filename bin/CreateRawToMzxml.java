@@ -1,4 +1,4 @@
-﻿import java.io.File;
+import java.io.File;
 import java.lang.String;
 import java.io.InputStream;
 import java.io.OutputStream;
